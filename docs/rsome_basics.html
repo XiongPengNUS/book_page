@@ -1,0 +1,1312 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+    <title>Basics of RSOME &#8212; Robust Stochastic Optimization Made Easy</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_basics';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Mean-Variance Portfolio" href="example_mean_variance_portfolio.html" />
+    <link rel="prev" title="Documentation" href="documentation.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="homepage.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">RSOME in Python</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="homepage.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="documentation.html" class="nav-link">Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Basics of RSOME</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="basics-of-rsome">
+<h1>Basics of RSOME<a class="headerlink" href="#basics-of-rsome" title="Permalink to this heading">#</a></h1>
+<p>RSOME, an open-source algebraic library, specializes in modeling generic optimization problems within uncertain environments. Offering a highly readable and mathematically intuitive modeling environment, RSOME is rooted in the state-of-the-art robust stochastic optimization framework.</p>
+<p>This guide serves as an introduction to the principal components, fundamental data structures, and syntax rules inherent to the RSOME package. For installation details, please refer to the <a class="reference internal" href="install.html"><span class="doc std std-doc">Install</span></a> page for comprehensive information.</p>
+<section id="modeling-environments">
+<span id="rsome-basics-modeling-env"></span><h2>Modeling Environments<a class="headerlink" href="#modeling-environments" title="Permalink to this heading">#</a></h2>
+<p>The RSOME package encompasses two key modules designed for formulating optimization problems within uncertain contexts:</p>
+<ul class="simple">
+<li><p>The <code class="docutils literal notranslate"><span class="pre">ro</span></code> module is a specialized modeling framework tailored for robust optimization problems. It equips users with modeling tools explicitly crafted for creating uncertainty sets and defining affine decision rules in multi-stage decision-making scenarios.</p></li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">dro</span></code> module builds upon the distributionally robust optimization framework introduced by <span id="id1">[<a class="reference internal" href="#id4" title="Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. Management Science, 66(8):3329–3339, 2020.">CSX20</a>]</span>. This module offers modeling tools for constructing event-wise ambiguity sets and specifying event-wise adaptation policies.</p></li>
+</ul>
+</section>
+<section id="introduction-to-the-rsome-ro-environment">
+<span id="rsome-basics-intro-ro-env"></span><h2>Introduction to the <code class="docutils literal notranslate"><span class="pre">rsome.ro</span></code> Environment<a class="headerlink" href="#introduction-to-the-rsome-ro-environment" title="Permalink to this heading">#</a></h2>
+<section id="models">
+<h3>Models<a class="headerlink" href="#models" title="Permalink to this heading">#</a></h3>
+<p>In RSOME, all optimization models are specified based on a <code class="docutils literal notranslate"><span class="pre">Model</span></code> type object. Such an object is created by the constructor <code class="docutils literal notranslate"><span class="pre">Model()</span></code> imported from the <code class="docutils literal notranslate"><span class="pre">rsome.ro</span></code> modeling environment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>            <span class="c1"># import the ro modeling tool</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s1">&#39;My model&#39;</span><span class="p">)</span>    <span class="c1"># create a Model object named &#39;My model&#39;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The code above defines a new <code class="docutils literal notranslate"><span class="pre">Model</span></code> object <code class="docutils literal notranslate"><span class="pre">model</span></code>, with the name specified to be the string <code class="docutils literal notranslate"><span class="pre">'My</span> <span class="pre">model'</span></code>. You could also leave the name unspecified and the default name is <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p>
+</section>
+<section id="decision-variables-and-linear-constraints">
+<h3>Decision Variables and Linear Constraints<a class="headerlink" href="#decision-variables-and-linear-constraints" title="Permalink to this heading">#</a></h3>
+<p>To define decision variables as arrays for the previously established model, you can utilize the statement <code class="docutils literal notranslate"><span class="pre">model.dvar(shape,</span> <span class="pre">vtype)</span></code>. In this context, the <code class="docutils literal notranslate"><span class="pre">shape</span></code> parameter designates the array’s dimensions, while <code class="docutils literal notranslate"><span class="pre">vtype</span></code> specifies whether the variables are continuous (‘C’), binary (‘B’), or general integers (‘I’). If left unspecified, the variables default to continuous. For instance:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">x</span></code> as a one-dimensional array with three integer decision variables;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y</span></code> as a <span class="math notranslate nohighlight">\(3\times 5\)</span> array of 15 binary decision variables;</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">z</span></code> as a <span class="math notranslate nohighlight">\(2\times 3 \times 4 \times 5\)</span> array of 120 continuous decision variables;</p></li>
+</ul>
+<p>can be defined by the following code segment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="n">vtype</span><span class="o">=</span><span class="s1">&#39;I&#39;</span><span class="p">)</span>    <span class="c1"># 3 integer variables as a 1D array</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">),</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>     <span class="c1"># 3x5 binary variables as a 2D array</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>    <span class="c1"># 2x3x4x5 continuous variables as a 4D array</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_remove-input docutils container">
+</div>
+<p>RSOME variables, defined as arrays, seamlessly integrate with standard NumPy array operations for expressing linear constraints. This includes capabilities for element-wise computation, matrix calculations, broadcasting, indexing, slicing, and more. This compatibility empowers users to define constraint blocks efficiently using the array system. For instance, the following constraint system:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{align}
+&amp;\sum\limits_{i\in[I]}b_ix_i = 1 &amp;&amp; \\
+&amp;\sum\limits_{i\in[I]}A_{ji}x_i \leq c_j &amp;&amp; j\in[J] \\
+&amp;\sum\limits_{j\in[J]}\sum\limits_{i\in I}y_{ji} \geq 1 &amp;&amp;\\
+&amp;\sum\limits_{i\in[I]}y_{ji} \geq 0 &amp;&amp; j\in [J] \\
+&amp;A_{ji}x_i \geq 1 &amp;&amp;\forall j\in[J], i\in[I] \\
+&amp;A_{ji}y_{ji} + x_i \geq 0 &amp;&amp; \forall j\in [J], i\in[I]
+\end{align}\end{split}\]</div>
+<p>with decision variable <span class="math notranslate nohighlight">\(\pmb{x}\in\mathbb{R}^I\)</span> and <span class="math notranslate nohighlight">\(\pmb{y}\in\mathbb{R}^{J\times I}\)</span>, along with parameters <span class="math notranslate nohighlight">\(\pmb{A}\in\mathbb{R}^{J\times I}\)</span>, <span class="math notranslate nohighlight">\(\pmb{b}\in\mathbb{R}^I\)</span>, and <span class="math notranslate nohighlight">\(\pmb{c}\in\mathbb{R}^J\)</span>, can be conveniently expressed using the code segment provided below.</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>               <span class="c1"># define x as a 1D array of I variables</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">J</span><span class="p">,</span> <span class="n">I</span><span class="p">))</span>          <span class="c1"># define y as a 2D array of JxI variables</span>
+
+<span class="n">b</span> <span class="o">@</span> <span class="n">x</span> <span class="o">==</span> <span class="mi">1</span>                      
+<span class="n">A</span> <span class="o">@</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">c</span>
+<span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+<span class="n">A</span> <span class="o">*</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">1</span>
+<span class="n">A</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>RSOME arrays can also be used in specifying the objective function of the optimization model. Note that the objective function must be one affine expression. In other words, the <code class="docutils literal notranslate"><span class="pre">size</span></code> attribute of the expression must be one, otherwise an error message would be generated.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">b</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>        <span class="c1"># minimize the objective function b @ x</span>
+<span class="n">model</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">b</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>        <span class="c1"># maximize the objective function b @ x</span>
+</pre></div>
+</div>
+<p>Model constraints can be specified by the method st(), which means “subject to”. This method allows users to define their constraints in different ways.</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">A</span> <span class="o">@</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>                    <span class="c1"># define one constraint</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="mi">1</span><span class="p">,</span>
+         <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span>
+         <span class="n">A</span><span class="o">*</span><span class="n">y</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>                  <span class="c1"># define multiple constraints</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">))</span>   <span class="c1"># define constraints by a loop</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="convex-expressions-and-convex-constraints">
+<h3>Convex Expressions and Convex Constraints<a class="headerlink" href="#convex-expressions-and-convex-constraints" title="Permalink to this heading">#</a></h3>
+<p>The RSOME package also support a range of functions for specifying convex expressions and constraints. The definition and syntax of these functions closely parallel the universal functions found in the NumPy package, as outlined in the tables below.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-left head"><p>Function</p></th>
+<th class="text-left head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">abs(x)</span></code></p></td>
+<td class="text-left"><p>The element-wise absolute values of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">entropy(x)</span></code></p></td>
+<td class="text-left"><p>The entropic expression <code class="docutils literal notranslate"><span class="pre">-sum(x</span> <span class="pre">*</span> <span class="pre">log(x))</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">exp(x)</span></code></p></td>
+<td class="text-left"><p>The element-wise natural exponential of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">expcone(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code></p></td>
+<td class="text-left"><p>The exponential cone constraint <code class="docutils literal notranslate"><span class="pre">z</span> <span class="pre">*</span> <span class="pre">exp(x/z)</span> <span class="pre">&lt;=</span> <span class="pre">y</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">kldiv(p,</span> <span class="pre">q,</span> <span class="pre">r)</span></code></p></td>
+<td class="text-left"><p>The KL divergence constraint <code class="docutils literal notranslate"><span class="pre">sum(p*log(p/q))</span> <span class="pre">&lt;=</span> <span class="pre">r</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">log(x)</span></code></p></td>
+<td class="text-left"><p>The element-wise natural logarithm of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">norm(x,</span> <span class="pre">degree)</span></code></p></td>
+<td class="text-left"><p>The <span class="math notranslate nohighlight">\(L^p\)</span>-norm of the <code class="docutils literal notranslate"><span class="pre">x</span></code>, where the value of <span class="math notranslate nohighlight">\(p\)</span> is specified by <code class="docutils literal notranslate"><span class="pre">degree</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">pexp(x,</span> <span class="pre">y)</span></code></p></td>
+<td class="text-left"><p>The element-wise perspective natural exponential <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">*</span> <span class="pre">exp(x/y)</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">plog(x,</span> <span class="pre">y)</span></code></p></td>
+<td class="text-left"><p>The element-wise perspective natural logarithm <code class="docutils literal notranslate"><span class="pre">y</span> <span class="pre">*</span> <span class="pre">log(x/y)</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">quad(x,</span> <span class="pre">Q)</span></code></p></td>
+<td class="text-left"><p>The quadratic term <code class="docutils literal notranslate"><span class="pre">x</span> <span class="pre">&#64;</span> <span class="pre">Q</span> <span class="pre">&#64;</span> <span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">rsocone(x,</span> <span class="pre">y,</span> <span class="pre">z)</span></code></p></td>
+<td class="text-left"><p>The rotated conic constraint <code class="docutils literal notranslate"><span class="pre">sumsqr(x)</span> <span class="pre">&lt;=</span> <span class="pre">y*z</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">square(x)</span></code></p></td>
+<td class="text-left"><p>The element-wise squared values of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">sumsqr(x)</span></code></p></td>
+<td class="text-left"><p>The sum of squares of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="matrix-operations">
+<h3>Matrix Operations<a class="headerlink" href="#matrix-operations" title="Permalink to this heading">#</a></h3>
+<p>When working with matrices (2-D arrays), RSOME facilitates fundamental operations such as calculating the trace, extracting diagonal elements, accessing upper/lower triangular elements, and concatenating arrays. Functions executing such operations are summarized in the following table.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-left head"><p>Function                                    </p></th>
+<th class="text-left head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">concat(arrays,</span> <span class="pre">axis)</span></code></p></td>
+<td class="text-left"><p>Concatenated arrays along the axes specified by <code class="docutils literal notranslate"><span class="pre">axis</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cstack(c1,</span> <span class="pre">...,</span> <span class="pre">cn)</span></code></p></td>
+<td class="text-left"><p>An array formed by stacking the iven arrays along axis 1.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">diag(x,</span> <span class="pre">k,</span> <span class="pre">fill)</span></code></p></td>
+<td class="text-left"><p>The diagonal elements of a two-dimensional array <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">rstack(r1,</span> <span class="pre">...,</span> <span class="pre">rn)</span></code></p></td>
+<td class="text-left"><p>An array formed by stacking the given arrays along axis 0.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">trace(x)</span></code></p></td>
+<td class="text-left"><p>The trace of a 2-D array <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">tril(x,</span> <span class="pre">k)</span></code></p></td>
+<td class="text-left"><p>The lower triangular elements of a two-dimensional array <code class="docutils literal notranslate"><span class="pre">x</span></code>. The integer <code class="docutils literal notranslate"><span class="pre">k</span></code> (<code class="docutils literal notranslate"><span class="pre">k=0</span></code> by default) specifies the shifts of the taken triangular elements.</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">triu(x,</span> <span class="pre">k)</span></code></p></td>
+<td class="text-left"><p>The upper triangular elements of a two-dimensional array <code class="docutils literal notranslate"><span class="pre">x</span></code>. The integer <code class="docutils literal notranslate"><span class="pre">k</span></code> (<code class="docutils literal notranslate"><span class="pre">k=0</span></code> by default) specifies the shifts of the taken triangular elements.</p></td>
+</tr>
+</tbody>
+</table>
+<p>RSOME also supports defining semidefiniteness constraints or linear matrix inequalities that enforce an array <code class="docutils literal notranslate"><span class="pre">X</span></code> to be positive semidefinite (<code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">&gt;&gt;</span> <span class="pre">0</span></code>) or negative semidefinite (<code class="docutils literal notranslate"><span class="pre">X</span> <span class="pre">&lt;&lt;</span> <span class="pre">0</span></code>). For instance, the constraint</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\left(
+\begin{array}{cc}
+A &amp; Z \\
+Z^{\top} &amp; \text{diag}(Z)
+\end{array}
+\right) \succeq 0\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(A\in\mathbb{R}^{n\times n}\)</span> and <span class="math notranslate nohighlight">\(Z\)</span> being a lower triangular matrix, can be written as the following Python code,</p>
+<div class="cell tag_remove-input docutils container">
+</div>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">rso</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">rstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">Z</span><span class="p">],</span> 
+                    <span class="p">[</span><span class="n">Z</span><span class="o">.</span><span class="n">T</span><span class="p">,</span> <span class="n">rso</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)])</span> <span class="o">&gt;&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>or equivalently,</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">A</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">))</span>
+<span class="n">Z</span> <span class="o">=</span> <span class="n">rso</span><span class="o">.</span><span class="n">tril</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">n</span><span class="p">)))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">cstack</span><span class="p">([</span><span class="n">A</span><span class="p">,</span> <span class="n">Z</span><span class="o">.</span><span class="n">T</span><span class="p">],</span> 
+                    <span class="p">[</span><span class="n">Z</span><span class="p">,</span> <span class="n">rso</span><span class="o">.</span><span class="n">diag</span><span class="p">(</span><span class="n">Z</span><span class="p">,</span> <span class="n">fill</span><span class="o">=</span><span class="kc">True</span><span class="p">)])</span> <span class="o">&gt;&gt;</span> <span class="mi">0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In this example, the <code class="docutils literal notranslate"><span class="pre">T</span></code> attribute of an RSOME array is consistent with the transpose operations of NumPy arrays, functions <code class="docutils literal notranslate"><span class="pre">rstack()</span></code> and <code class="docutils literal notranslate"><span class="pre">cstack()</span></code> are used to create new arrays by stacking rows or columns together, respectively.</p>
+</section>
+</section>
+<section id="standard-forms-and-solutions">
+<span id="rsome-basics-sform-sol"></span><h2>Standard Forms and Solutions<a class="headerlink" href="#standard-forms-and-solutions" title="Permalink to this heading">#</a></h2>
+<p>Every RSOME model undergoes transformation into its standard form, subsequently solved through the solver interface. The standard form of either the primal (default case) or dual problem, can be accessed using the <code class="docutils literal notranslate"><span class="pre">do_math()</span></code> method of the model object. Refer to the sample code below for illustration.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+
+<span class="n">n</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">c</span> <span class="o">@</span> <span class="n">x</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">primal</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">do_math</span><span class="p">()</span>            <span class="c1"># standard form of the primal problem by defualt</span>
+<span class="n">dual</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">do_math</span><span class="p">(</span><span class="n">primal</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>  <span class="c1"># standard form of the dual problem</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">primal</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Conic program object:
+=============================================
+Number of variables:           8
+Continuous/binaries/integers:  8/0/0
+---------------------------------------------
+Number of linear constraints:  5
+Inequalities/equalities:       2/3
+Number of coefficients:        11
+---------------------------------------------
+Number of SOC constraints:     1
+---------------------------------------------
+Number of ExpCone constraints: 0
+---------------------------------------------
+Number of PSCone constraints:  0
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dual</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Conic program object:
+=============================================
+Number of variables:           5
+Continuous/binaries/integers:  5/0/0
+---------------------------------------------
+Number of linear constraints:  4
+Inequalities/equalities:       0/4
+Number of coefficients:        7
+---------------------------------------------
+Number of SOC constraints:     1
+---------------------------------------------
+Number of ExpCone constraints: 0
+---------------------------------------------
+Number of PSCone constraints:  0
+</pre></div>
+</div>
+</div>
+</div>
+<p>Further insights into the standard format are available through the <code class="docutils literal notranslate"><span class="pre">show()</span></code> method, presenting comprehensive information on variables, objectives, and constraints in a Pandas data frame.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">primal</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x1</th>
+      <th>x2</th>
+      <th>x3</th>
+      <th>x4</th>
+      <th>x5</th>
+      <th>x6</th>
+      <th>x7</th>
+      <th>x8</th>
+      <th>sense</th>
+      <th>constant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Obj</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>LC1</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>==</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>LC2</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>==</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>LC3</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-1.0</td>
+      <td>0.0</td>
+      <td>==</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>LC4</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>&lt;=</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>LC5</th>
+      <td>-1.0</td>
+      <td>-1.624345</td>
+      <td>0.611756</td>
+      <td>0.528172</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>&lt;=</td>
+      <td>-0.0</td>
+    </tr>
+    <tr>
+      <th>QC1</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-1.0</td>
+      <td>&lt;=</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>UB</th>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>LB</th>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>0.0</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dual</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>x1</th>
+      <th>x2</th>
+      <th>x3</th>
+      <th>x4</th>
+      <th>x5</th>
+      <th>sense</th>
+      <th>constant</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Obj</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>LC1</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-1.0</td>
+      <td>==</td>
+      <td>1.0</td>
+    </tr>
+    <tr>
+      <th>LC2</th>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>-1.624345</td>
+      <td>==</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>LC3</th>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.611756</td>
+      <td>==</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>LC4</th>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>1.0</td>
+      <td>0.0</td>
+      <td>0.528172</td>
+      <td>==</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>QC1</th>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>1.0</td>
+      <td>-1.0</td>
+      <td>0.0</td>
+      <td>&lt;=</td>
+      <td>0.0</td>
+    </tr>
+    <tr>
+      <th>UB</th>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>inf</td>
+      <td>0.0</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>LB</th>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>-inf</td>
+      <td>0.0</td>
+      <td>-inf</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    <tr>
+      <th>Type</th>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>C</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>The standard form of a model can be solved by calling the <code class="docutils literal notranslate"><span class="pre">solve()</span></code> method of the <code class="docutils literal notranslate"><span class="pre">Model</span></code> object. The first argument <code class="docutils literal notranslate"><span class="pre">solver</span></code> is used to specify the selected solver interface. If the solver is unspecified, the default linear optimization solver imported from the the <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code> module is used for solving the model. RSOME is also compatible with a range of open-source and commercial solvers.  Comprehensive information about the supported solvers is outlined in the table below.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-left head"><p>Solver</p></th>
+<th class="text-left head"><p>RSOME interface</p></th>
+<th class="text-left head"><p>SOCP</p></th>
+<th class="text-left head"><p>ECP</p></th>
+<th class="text-left head"><p>SDP</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">lpg_solver</span></code></p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>CyLP</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">clp_solver</span></code></p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>OR-Tools</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">ort_solver</span></code></p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>ECOS</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">eco_solver</span></code></p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>Gurobi</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">grb_solver</span></code></p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>Mosek</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">msk_solver</span></code></p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>Yes</p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p>CPLEX</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cpx_solver</span></code></p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p>COPT</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">cpt_solver</span></code></p></td>
+<td class="text-left"><p>Yes</p></td>
+<td class="text-left"><p>No</p></td>
+<td class="text-left"><p>No</p></td>
+</tr>
+</tbody>
+</table>
+<p>The model above involves second-order cone constraints, so we could use ECOS, Gurobi, Mosek, CPLEX, or COPT to solve it. The interfaces for these solvers are imported by the following commands.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">eco_solver</span> <span class="k">as</span> <span class="n">eco</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">grb_solver</span> <span class="k">as</span> <span class="n">grb</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">msk_solver</span> <span class="k">as</span> <span class="n">msk</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">cpx_solver</span> <span class="k">as</span> <span class="n">cpx</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">cpt_solver</span> <span class="k">as</span> <span class="n">cpt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The interfaces can be then used to attain the solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">eco</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by ECOS...
+Solution status: Optimal solution found
+Running time: 0.0006s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">grb</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by Gurobi...
+Solution status: 2
+Running time: 0.0008s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">msk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by Mosek...
+Solution status: Optimal
+Running time: 0.0261s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cpx</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by CPLEX...
+Solution status: optimal
+Running time: 0.0081s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cpt</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Cardinal Optimizer v6.5.3. Build date Apr 28 2023
+Copyright Cardinal Operations 2023. All Rights Reserved
+
+Being solved by COPT...
+Solution status: 1
+Running time: 0.0056s
+</pre></div>
+</div>
+</div>
+</div>
+<p>It can be seen that as the model is solved, a three-line message is displayed in terms of 1) the solver used for solving the model; 2) the solution status; and 3) the solution time. This three-line message can be disabled by specifying the second argument <code class="docutils literal notranslate"><span class="pre">display</span></code> to be <code class="docutils literal notranslate"><span class="pre">False</span></code>.</p>
+<p>The third argument <code class="docutils literal notranslate"><span class="pre">params</span></code> is used to tune solver parameters. The current RSOME package enables users to adjust parameters for Gurobi, MOSEK, and CPLEX. The <code class="docutils literal notranslate"><span class="pre">params</span></code> argument is a <code class="docutils literal notranslate"><span class="pre">dict</span></code> type object in the format of <code class="docutils literal notranslate"><span class="pre">{&lt;param1&gt;:</span> <span class="pre">&lt;value1&gt;,</span> <span class="pre">&lt;param2&gt;:</span> <span class="pre">&lt;value2&gt;,</span> <span class="pre">&lt;param3&gt;:</span> <span class="pre">&lt;value3&gt;,</span> <span class="pre">...,</span> <span class="pre">&lt;paramk&gt;:</span> <span class="pre">&lt;valuek&gt;}</span></code>. Information on solver parameters and their valid values are provided below. Please make sure that you are specifying parameters with the correct data type, otherwise error messages might be raised.</p>
+<ul class="simple">
+<li><p>Gurobi parameters: <a class="reference external" href="https://www.gurobi.com/documentation/current/refman/parameters.html">https://www.gurobi.com/documentation/current/refman/parameters.html</a></p></li>
+<li><p>MOSEK parameters: <a class="reference external" href="https://docs.mosek.com/latest/pythonapi/parameters.html">https://docs.mosek.com/latest/pythonapi/parameters.html</a></p></li>
+<li><p>CPLEX parameters: <a class="reference external" href="https://www.ibm.com/docs/en/icos/20.1.0?topic=tutorial-using-cplex-parameters-in-cplex-python-api">https://www.ibm.com/docs/en/icos/20.1.0?topic=tutorial-using-cplex-parameters-in-cplex-python-api</a></p></li>
+</ul>
+<p>For example, the following code solves the problem using Gurobi, MOSEK, and CPLEX, respectively, with the relative MIP gap tolerance to be <code class="docutils literal notranslate"><span class="pre">1e-3</span></code>.</p>
+<div class="cell tag_remove-output docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">grb</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;MIPGap&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">})</span>
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">msk</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mioTolRelGap&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">})</span>
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cpx</span><span class="p">,</span> <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;mip.tolerances.mipgap&#39;</span><span class="p">:</span> <span class="mf">1e-3</span><span class="p">})</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Once the optimization problem is solved, you may use the command <code class="docutils literal notranslate"><span class="pre">model.get()</span></code> to retrieve the optimal objective value. The optimal solution of the variable <code class="docutils literal notranslate"><span class="pre">x</span></code> can be attained as an array by calling <code class="docutils literal notranslate"><span class="pre">x.get()</span></code>. The <code class="docutils literal notranslate"><span class="pre">get()</span></code> method raises an error message if the optimization problem is unsolved, or the optimal solution cannot be found due to infeasibility, unboundedness, or numerical issues.</p>
+</section>
+<section id="application-examples">
+<span id="rsome-basics-examples"></span><h2>Application Examples<a class="headerlink" href="#application-examples" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><a class="reference internal" href="example_mean_variance_portfolio.html"><span class="doc std std-doc">Mean-Variance Portfolio</span></a></p></li>
+<li><p><a class="reference internal" href="example_sudoku.html"><span class="doc std std-doc">Integer Programming for Sudoku</span></a></p></li>
+<li><p><a class="reference internal" href="example_dc_opf.html"><span class="doc std std-doc">Optimal DC Power Flow</span></a></p></li>
+<li><p><a class="reference internal" href="example_ac_opf.html"><span class="doc std std-doc">Conic Relaxation of Optimal AC Power Flows</span></a></p></li>
+<li><p><a class="reference internal" href="example_uc.html"><span class="doc std std-doc">The Unit Commitment Problem</span></a></p></li>
+<li><p><a class="reference internal" href="example_max_box.html"><span class="doc std std-doc">Box with the Maximum Volume</span></a></p></li>
+<li><p><a class="reference internal" href="example_min_ellipsoid.html"><span class="doc std std-doc">Minimal Enclosing Ellipsoid</span></a></p></li>
+<li><p><a class="reference internal" href="example_logit.html"><span class="doc std std-doc">Logistic Regression</span></a></p></li>
+</ul>
+<br>
+<br>
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id2">
+<dl class="citation">
+<dt class="label" id="id4"><span class="brackets"><a class="fn-backref" href="#id1">CSX20</a></span></dt>
+<dd><p>Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. <em>Management Science</em>, 66(8):3329–3339, 2020.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="documentation.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Documentation</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_mean_variance_portfolio.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Mean-Variance Portfolio</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<p class="component-author">
+By Zhi Chen, Melvyn Sim, Peng Xiong
+</p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

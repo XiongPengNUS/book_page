@@ -1,0 +1,1001 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+    <title>The Unit Commitment Problem &#8212; Robust Stochastic Optimization Made Easy</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'example_uc';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application Examples" href="examples.html" />
+    <link rel="prev" title="Conic Relaxation of Optimal AC Power Flows" href="example_ac_opf.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="homepage.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">RSOME in Python</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="homepage.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="documentation.html" class="nav-link">Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">The Unit...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="the-unit-commitment-problem">
+<span id="ucp-title"></span><h1>The Unit Commitment Problem<a class="headerlink" href="#the-unit-commitment-problem" title="Permalink to this heading">#</a></h1>
+<p>Here, we will solve a unit commitment (UC) problem described in the <a class="reference external" href="https://ibmdecisionoptimization.github.io/docplex-doc/mp/ucp_pandas.html">tutorial of IBM Decision Optimization CPLEX for Python (DOcplex)</a>. The electricity demand data and parameters of all generators are provided in the Excel file <a class="reference download internal" download="" href="_downloads/b2fea4d980aeaf6e7d92e34008aecd01/uc_data.xlsx"><span class="xref download myst">uc_data.xlsx</span></a>, see the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">demand</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;uc_data.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;Demand&#39;</span><span class="p">)</span>     <span class="c1"># Electricity demand </span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">demand</span><span class="o">.</span><span class="n">index</span><span class="p">,</span> <span class="n">demand</span><span class="p">[</span><span class="s1">&#39;load&#39;</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (hour)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Demand (MWh)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/df32bb3576dbe6f9ba0af9222dc5ff859ee8b0802cb23f01e59bf56be22e19d8.png" src="_images/df32bb3576dbe6f9ba0af9222dc5ff859ee8b0802cb23f01e59bf56be22e19d8.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">units</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;uc_data.xlsx&#39;</span><span class="p">,</span> <span class="s1">&#39;Units&#39;</span><span class="p">)</span>       <span class="c1"># Parameters of generators</span>
+<span class="n">units</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>name</th>
+      <th>energy</th>
+      <th>initial</th>
+      <th>min_gen</th>
+      <th>max_gen</th>
+      <th>uptime</th>
+      <th>downtime</th>
+      <th>ramp_up</th>
+      <th>ramp_down</th>
+      <th>start_cost</th>
+      <th>fixed_cost</th>
+      <th>variable_cost</th>
+      <th>co2_cost</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>coal1</td>
+      <td>coal</td>
+      <td>400</td>
+      <td>100.00</td>
+      <td>425</td>
+      <td>15</td>
+      <td>9</td>
+      <td>212.0</td>
+      <td>183.0</td>
+      <td>5000</td>
+      <td>208.610</td>
+      <td>22.536</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>coal2</td>
+      <td>coal</td>
+      <td>350</td>
+      <td>140.00</td>
+      <td>365</td>
+      <td>15</td>
+      <td>8</td>
+      <td>150.0</td>
+      <td>198.0</td>
+      <td>4550</td>
+      <td>117.370</td>
+      <td>31.985</td>
+      <td>30</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>gas1</td>
+      <td>gas</td>
+      <td>205</td>
+      <td>78.00</td>
+      <td>220</td>
+      <td>6</td>
+      <td>7</td>
+      <td>101.2</td>
+      <td>95.6</td>
+      <td>1320</td>
+      <td>174.120</td>
+      <td>70.500</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>gas2</td>
+      <td>gas</td>
+      <td>52</td>
+      <td>52.00</td>
+      <td>210</td>
+      <td>5</td>
+      <td>4</td>
+      <td>94.8</td>
+      <td>101.7</td>
+      <td>1291</td>
+      <td>172.750</td>
+      <td>69.000</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>gas3</td>
+      <td>gas</td>
+      <td>155</td>
+      <td>54.25</td>
+      <td>165</td>
+      <td>5</td>
+      <td>3</td>
+      <td>58.0</td>
+      <td>77.5</td>
+      <td>1280</td>
+      <td>95.353</td>
+      <td>32.146</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>gas4</td>
+      <td>gas</td>
+      <td>150</td>
+      <td>39.00</td>
+      <td>158</td>
+      <td>4</td>
+      <td>2</td>
+      <td>50.0</td>
+      <td>60.0</td>
+      <td>1105</td>
+      <td>144.520</td>
+      <td>54.840</td>
+      <td>5</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>diesel1</td>
+      <td>diesel</td>
+      <td>78</td>
+      <td>17.40</td>
+      <td>90</td>
+      <td>3</td>
+      <td>2</td>
+      <td>40.0</td>
+      <td>24.0</td>
+      <td>560</td>
+      <td>54.417</td>
+      <td>40.222</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>diesel2</td>
+      <td>diesel</td>
+      <td>76</td>
+      <td>15.20</td>
+      <td>87</td>
+      <td>3</td>
+      <td>2</td>
+      <td>60.0</td>
+      <td>45.0</td>
+      <td>554</td>
+      <td>54.551</td>
+      <td>40.522</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>diesel3</td>
+      <td>diesel</td>
+      <td>0</td>
+      <td>4.00</td>
+      <td>20</td>
+      <td>1</td>
+      <td>1</td>
+      <td>20.0</td>
+      <td>20.0</td>
+      <td>300</td>
+      <td>79.638</td>
+      <td>116.330</td>
+      <td>15</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>diesel4</td>
+      <td>diesel</td>
+      <td>0</td>
+      <td>2.40</td>
+      <td>12</td>
+      <td>1</td>
+      <td>1</td>
+      <td>12.0</td>
+      <td>12.0</td>
+      <td>250</td>
+      <td>16.259</td>
+      <td>76.642</td>
+      <td>15</td>
+    </tr>
+  </tbody>
+</table>
+</div></div></div>
+</div>
+<p>Parameters of units are defined by the code segment below,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">g_init</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;initial&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">u_init</span> <span class="o">=</span> <span class="p">(</span><span class="n">g_init</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+<span class="n">g_min</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;min_gen&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">g_max</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;max_gen&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">h_up</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;uptime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">h_down</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;downtime&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">r_up</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;ramp_up&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">r_down</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;ramp_down&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;fixed_cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;variable_cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;start_cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">d</span> <span class="o">=</span> <span class="n">demand</span><span class="p">[</span><span class="s1">&#39;load&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+<span class="n">e</span> <span class="o">=</span> <span class="n">units</span><span class="p">[</span><span class="s1">&#39;co2_cost&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>and detailed information on these parameters is provided in the following table.</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-left head"><p>Notation</p></th>
+<th class="text-left head"><p>Interpretation</p></th>
+<th class="text-left head"><p>Array Expression</p></th>
+<th class="text-left head"><p>Variable</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(g_n^{\text{init}}\)</span></p></td>
+<td class="text-left"><p>The initial output of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['initial'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g_init</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(u_n^{\text{init}}\)</span></p></td>
+<td class="text-left"><p>The initial on/off status of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">(g_init</span> <span class="pre">&gt;</span> <span class="pre">0).astype(int)</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">u_init</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(g_n^{\min}\)</span></p></td>
+<td class="text-left"><p>The minimum capacity of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['min'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g_min</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(g_n^{\max}\)</span></p></td>
+<td class="text-left"><p>The maximum capacity of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['max'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g_max</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(h_n^{\text{up}}\)</span></p></td>
+<td class="text-left"><p>The minimum up time of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['uptime'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">h_up</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(h_n^{\text{down}}\)</span></p></td>
+<td class="text-left"><p>The minimum down time of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['downtime'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">h_down</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(r_n^{\text{up}}\)</span></p></td>
+<td class="text-left"><p>The ramp-up rate limit of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['ramp_up'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">r_up</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(h_n^{\text{down}}\)</span></p></td>
+<td class="text-left"><p>The ramp-down rate limit of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['ramp_down'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">r_down</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(a_n\)</span></p></td>
+<td class="text-left"><p>The fixed cost of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['fixed_cost'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">a</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(b_n\)</span></p></td>
+<td class="text-left"><p>The variable cost of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['variable_cost'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">b</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(c_n\)</span></p></td>
+<td class="text-left"><p>The start-up cost of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['start_cost'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">c</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(d_t\)</span></p></td>
+<td class="text-left"><p>The electricity demand at time step <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">demand['load'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">d</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(e_n\)</span></p></td>
+<td class="text-left"><p>The CO2 emission cost of the <span class="math notranslate nohighlight">\(n\)</span>th generator</p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">units['co2_cost'].values</span></code></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">e</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The UC model below is used to determine the optimal schedule of on/off status of generators:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\min~&amp;\sum\limits_{t=1}^T\sum\limits_{n=1}^N\left(a_nu_{tn} + b_ng_{tn} + c_nv_{tn} + e_ng_{tn}\right) \hspace{-1in}&amp; \tag{1}\\
+\text{s.t.}~&amp;v_{1n} \geq u_{1n} - u_n^{\text{init}}, ~v_{1n} \geq 0 &amp;\forall n= 1, ..., N \tag{2}\\
+&amp;v_{tn} \geq u_{tn} - u_{(t-1)u}, ~v_{tn} \geq 0 &amp; \forall t = 2, ..., T, \forall n = 1, ..., N \tag{3}\\
+&amp;w_{1n} \geq u_n^{\text{init}} - u_{1n}, w_{1n} \geq 0 &amp;\forall n= 1, ..., N \tag{4}\\
+&amp;w_{tn} \geq u_{(t-1)u} - u_{tn}, w_{tn} \geq 0 &amp; \forall t = 2, ..., T, \forall n = 1, ..., N \tag{5}\\
+&amp;\sum\limits_{k=t-h_n^{\text{up}}}^tv_{tn} \leq u_{tn} &amp; \forall t=h_n^{\text{up}}+1, ..., T, \forall n = 1, ..., N \tag{6}\\
+&amp;\sum\limits_{k=t-h_n^{\text{down}}}^tw_{tn} \leq 1 - u_{tn} &amp; \forall t=h_n^{\text{down}}+1, ..., T, \forall n = 1, ..., N \tag{7}\\
+&amp;\sum\limits_{n=1}^Tg_{tn} = d_{t} &amp;\forall t=1, ..., T \tag{8}\\
+&amp;u_{tn}g_n^{\text{min}} \leq g_{tn} \leq u_{tn}g_n^{\text{max}} &amp;\forall t=1, ..., T, \forall n = 1, ..., N \tag{9}\\
+&amp;g_{1n} - g_n^{\text{init}} \leq r_n^{\text{up}} &amp;\forall n = 1, ..., N \tag{10}\\
+&amp;g_{tn} - g_{(t-1)n} \leq r_n^{\text{up}} &amp;\forall t=2, ..., T, \forall n=1, ..., N \tag{11}\\
+&amp;g_n^{\text{init}} - g_{1n} \leq r_n^{\text{down}} &amp;\forall n = 1, ..., N \tag{12}\\
+&amp;g_{(t-1)n} - g_{tn} \leq r_n^{\text{down}} &amp;\forall t=2, ..., T, \forall n=1, ..., N \tag{13} 
+\end{align}
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(T\)</span> is the number of time steps, and <span class="math notranslate nohighlight">\(N\)</span> is the number of generator units, with the decision variables</p>
+<table class="colwidths-auto table">
+<thead>
+<tr class="row-odd"><th class="text-left head"><p>Notation</p></th>
+<th class="text-left head"><p>Interpretation</p></th>
+<th class="text-left head"><p>Variable</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(u_{tn}\)</span></p></td>
+<td class="text-left"><p>Binary variable indicating the on/off status of the <span class="math notranslate nohighlight">\(n\)</span>th generator at the time step <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">u</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(v_{tn}\)</span></p></td>
+<td class="text-left"><p>Binary variable indicating the start-up of the <span class="math notranslate nohighlight">\(n\)</span>th generator at the time step <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">v</span></code></p></td>
+</tr>
+<tr class="row-even"><td class="text-left"><p><span class="math notranslate nohighlight">\(w_{tn}\)</span></p></td>
+<td class="text-left"><p>Binary variable indicating the shut-down status of the <span class="math notranslate nohighlight">\(n\)</span>th generator at the time step <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">w</span></code></p></td>
+</tr>
+<tr class="row-odd"><td class="text-left"><p><span class="math notranslate nohighlight">\(g_{tn}\)</span></p></td>
+<td class="text-left"><p>Continuous variable representing the output of the <span class="math notranslate nohighlight">\(n\)</span>th generator at the time step <span class="math notranslate nohighlight">\(t\)</span></p></td>
+<td class="text-left"><p><code class="docutils literal notranslate"><span class="pre">g</span></code></p></td>
+</tr>
+</tbody>
+</table>
+<p>The UC model above minimizes the total cost of generation and emission, expressed by equation <span class="math notranslate nohighlight">\((1)\)</span>, subject to</p>
+<ul class="simple">
+<li><p>Constraints <span class="math notranslate nohighlight">\((2)-(3)\)</span> for the switch-on status of generator units;</p></li>
+<li><p>Constraints <span class="math notranslate nohighlight">\((4)-(5)\)</span> for the switch-off status of generator units;</p></li>
+<li><p>Minimum up-time constraints <span class="math notranslate nohighlight">\((6)\)</span> and minimum down-time constraints <span class="math notranslate nohighlight">\((7)\)</span>;</p></li>
+<li><p>Power balance equations <span class="math notranslate nohighlight">\((8)\)</span>;</p></li>
+<li><p>Power generation capacity constraints <span class="math notranslate nohighlight">\((9)\)</span>;</p></li>
+<li><p>Generator ramp-up limits <span class="math notranslate nohighlight">\((10)-(11)\)</span> and ramp-down limits <span class="math notranslate nohighlight">\((12)-(13)\)</span>.</p></li>
+</ul>
+<p>Such a model can be solved with RSOME using the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="n">units</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>                                            <span class="c1"># N as the number of units</span>
+<span class="n">T</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>                                                    <span class="c1"># T as the number of time steps</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="s1">&#39;UC&#39;</span><span class="p">)</span>                                        <span class="c1"># Create a model named &#39;UC&#39;</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>                                   <span class="c1"># Unit on/off status</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>                                   <span class="c1"># Switch-on status of units</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">),</span> <span class="s1">&#39;B&#39;</span><span class="p">)</span>                                   <span class="c1"># Switch-off status of units</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">T</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>                                        <span class="c1"># Generation outputs</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">min</span><span class="p">((</span><span class="n">a</span><span class="o">*</span><span class="n">u</span> <span class="o">+</span> <span class="n">b</span><span class="o">*</span><span class="n">g</span> <span class="o">+</span> <span class="n">c</span><span class="o">*</span><span class="n">v</span> <span class="o">+</span> <span class="n">e</span><span class="o">*</span><span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                      <span class="c1"># Minimize the total cost (1)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">u_init</span><span class="p">,</span> 
+         <span class="n">v</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&gt;=</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+         <span class="n">v</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>                                              <span class="c1"># Switch-on status of units (2)-(3)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&gt;=</span>  <span class="n">u_init</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> 
+         <span class="n">w</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&gt;=</span> <span class="n">u</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="mi">1</span><span class="p">:],</span>
+         <span class="n">w</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>                                              <span class="c1"># Switch-off status of units (4)-(5) </span>
+<span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="n">h_up</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span> 
+             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h_up</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">T</span><span class="p">))</span>                      <span class="c1"># Minimum up-time constraints (6)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">w</span><span class="p">[</span><span class="n">t</span><span class="o">-</span><span class="n">h_down</span><span class="p">[</span><span class="n">n</span><span class="p">]</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">-</span> <span class="n">u</span><span class="p">[</span><span class="n">t</span><span class="p">,</span> <span class="n">n</span><span class="p">]</span>
+             <span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">h_down</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="n">T</span><span class="p">))</span>                    <span class="c1"># Minimum down-time constraints (7)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="n">d</span><span class="p">)</span>                                  <span class="c1"># Power balance equation (8)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">g</span> <span class="o">&gt;=</span> <span class="n">u</span><span class="o">*</span><span class="n">g_min</span><span class="p">,</span>                                      
+         <span class="n">g</span> <span class="o">&lt;=</span> <span class="n">u</span><span class="o">*</span><span class="n">g_max</span><span class="p">)</span>                                        <span class="c1"># Minimum/aaximum capacities of units (9)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">g_init</span> <span class="o">&lt;=</span> <span class="n">r_up</span><span class="p">,</span>                               <span class="c1"># Ramp-up rate limits (10)-(11)</span>
+         <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">-</span> <span class="n">g</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r_up</span><span class="p">,</span>
+         <span class="n">g_init</span> <span class="o">-</span> <span class="n">g</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="n">r_down</span><span class="p">,</span>
+         <span class="n">g</span><span class="p">[:</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">g</span><span class="p">[</span><span class="mi">1</span><span class="p">:]</span> <span class="o">&lt;=</span> <span class="n">r_down</span><span class="p">)</span>                            <span class="c1"># Ramp-down rate limits (12)-(13)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>                                                 <span class="c1"># Solve the model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the default MILP solver...
+Solution status: 0
+Running time: 1.0400s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Similar to the case study discussed in the <a class="reference external" href="https://ibmdecisionoptimization.github.io/docplex-doc/mp/ucp_pandas.html">IBM CPLEX tutorial</a>, the total operating cost and the breakdown of each cost component is calculated and listed below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total cost:          </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total fixed cost:    </span><span class="si">{</span><span class="p">(</span><span class="n">a</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="n">get</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total variable cost: </span><span class="si">{</span><span class="p">(</span><span class="n">b</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="n">get</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total start-up cost: </span><span class="si">{</span><span class="p">(</span><span class="n">c</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total economic cost: </span><span class="si">{</span><span class="p">(</span><span class="n">a</span><span class="o">*</span><span class="n">u</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">b</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">c</span><span class="o">*</span><span class="n">v</span><span class="o">.</span><span class="n">get</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Total CO2 cost:      </span><span class="si">{</span><span class="p">(</span><span class="n">e</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="n">get</span><span class="p">())</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span><span class="si">:</span><span class="s1">12.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Total cost:          14213082.064
+Total fixed cost:      161025.131
+Total variable cost:  8865900.433
+Total start-up cost:     2832.000
+Total economic cost:  9029757.564
+Total CO2 cost:       5183324.500
+</pre></div>
+</div>
+</div>
+</div>
+<p>The optimal schedule in terms of generation from each type of generators is shown as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">gen</span> <span class="o">=</span> <span class="n">units</span><span class="p">[[</span><span class="s1">&#39;name&#39;</span><span class="p">,</span> <span class="s1">&#39;energy&#39;</span><span class="p">]]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+<span class="n">gen</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">((</span><span class="n">gen</span><span class="p">,</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">.</span><span class="n">T</span><span class="p">)),</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">outputs</span> <span class="o">=</span> <span class="n">gen</span><span class="o">.</span><span class="n">groupby</span><span class="p">(</span><span class="s1">&#39;energy&#39;</span><span class="p">)[</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">T</span><span class="p">)]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>
+<span class="n">energy</span> <span class="o">=</span> <span class="p">[</span><span class="s1">&#39;diesel&#39;</span><span class="p">,</span> <span class="s1">&#39;coal&#39;</span><span class="p">,</span> <span class="s1">&#39;gas&#39;</span><span class="p">]</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">label</span> <span class="ow">in</span> <span class="n">energy</span><span class="p">:</span>
+    <span class="n">ydata</span> <span class="o">=</span> <span class="n">outputs</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">label</span><span class="p">]</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">bottom</span><span class="o">+</span><span class="n">ydata</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.75</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">label</span><span class="si">}</span><span class="s1"> energy&#39;</span><span class="o">.</span><span class="n">title</span><span class="p">())</span>
+    <span class="n">bottom</span> <span class="o">+=</span> <span class="n">ydata</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">),</span> <span class="n">d</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Total Demand&#39;</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Time (hour)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Generation (MW)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/cd66a950d3f89850ca0a92bab1b4bac0d1903f5a639516ffc7a6d7e711d8c4ab.png" src="_images/cd66a950d3f89850ca0a92bab1b4bac0d1903f5a639516ffc7a6d7e711d8c4ab.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_ac_opf.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Conic Relaxation of Optimal AC Power Flows</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Application Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<p class="component-author">
+By Zhi Chen, Melvyn Sim, Peng Xiong
+</p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
