@@ -1,5 +1,6 @@
 # In _config.yml
-title: Robust Stochastic Optimization Made Easy
+title: "Robust Stochastic Optimization Made Easy"
+version: "1.2.5"
 author: Zhi Chen, Melvyn Sim, Peng Xiong
 copyright: "2023" 
 logo: logo.png
@@ -45,10 +46,15 @@ sphinx:
         #show_toc_level: 2
         #collapse_navigation: true
         #navigation_depth: 0
+        #navbar_start: ["navbar-logo"]
+        #navbar_center: ["navbar-nav"]
+        #navbar_end: ["navbar-icon-links"]
+        #navbar_persistent: ["search-button"]
+        #navbar_align: "left"
         secondary_sidebar_items: []
         logo:
             image_dark: "logo.png"
-            text: Algebraic Modeling Toolbox
+            text: Modeling Toolbox
         footer_start: [author]
         footer_end: [copyright]
         github_url: "https://github.com/XiongPengNUS/rsome"
