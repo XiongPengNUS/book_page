@@ -1,0 +1,19 @@
+# In _toc.yml
+format: jb-book
+root: homepage
+
+chapters:
+- file: install
+- file: documentation
+  sections:
+    - file: rsome_basics
+    - file: example_mean_variance_portfolio
+    - file: example_sudoku
+    - file: example_dc_opf
+    - file: example_ac_opf
+    - file: example_uc
+    - file: example_max_box
+    - file: example_min_ellipsoid
+    - file: example_logit
+- file: examples
+- file: contact

@@ -1,0 +1,55 @@
+# In _config.yml
+title: Robust Stochastic Optimization Made Easy
+author: Zhi Chen, Melvyn Sim, Peng Xiong
+copyright: "2023" 
+logo: logo.png
+execute:
+  execute_notebooks: off
+
+# Add a bibtex file so that we can create citations
+bibtex_bibfiles:
+  - references.bib
+  
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/XiongPengNUS/rsome
+  branch: master
+  
+# Add GitHub buttons to the book
+html:
+  use_issues_button: true
+  use_repository_button: true
+
+extensions: [gallery_generator]
+# parse:
+#   myst_enable_extensions:
+    # don't forget to list any other extensions you want enabled,
+    # including those that are enabled by default!
+#     - amsmath
+
+#parse:
+#  myst_enable_extensions:
+#    - html_image
+
+sphinx:
+  config:
+    html_theme: pydata_sphinx_theme
+    html_sidebars: {"**": []}
+    # html_theme: sphinxawesome_theme
+    #html_theme: sphinx_rtd_theme
+    # html_theme: sphinx_book_theme
+    html_theme_options:
+        #style_nav_header_background: white
+        #nosidebar: true
+        #collapse_navigation: true
+        #show_toc_level: 2
+        #collapse_navigation: true
+        #navigation_depth: 0
+        secondary_sidebar_items: []
+        logo:
+            image_dark: "logo.png"
+            text: Algebraic Modeling Toolbox
+        footer_start: [author]
+        footer_end: [copyright]
+        github_url: "https://github.com/XiongPengNUS/rsome"
+    html_show_sourcelink: false
