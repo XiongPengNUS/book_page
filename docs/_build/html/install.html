@@ -450,7 +450,7 @@ document.write(`
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the default LP solver...
 Solution status: 0
-Running time: 0.0050s
+Running time: 0.0076s
 </pre></div>
 </div>
 </div>
@@ -473,9 +473,20 @@ Objective: 22.4
 </div>
 </div>
 </section>
+<section id="dependencies">
+<h2>Dependencies<a class="headerlink" href="#dependencies" title="Permalink to this heading">#</a></h2>
+<p>The minimum dependencies of the current version of RSOME are:</p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.python.org/">Python</a> &gt;= 3.8</p></li>
+<li><p><a class="reference external" href="https://numpy.org/">NumPy</a> &gt;= 1.20.0</p></li>
+<li><p><a class="reference external" href="https://scipy.org/">SciPy</a> &gt;= 1.9.0</p></li>
+<li><p><a class="reference external" href="https://pandas.pydata.org/">Pandas</a> &gt;= 0.25.0</p></li>
+</ul>
+<p>The installation of solvers is optional and the details can be found below.</p>
+</section>
 <section id="installation-of-solvers">
 <span id="label-solver-installation"></span><h2>Installation of Solvers<a class="headerlink" href="#installation-of-solvers" title="Permalink to this heading">#</a></h2>
-<p>In addition to the default linear programming solver <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>, RSOME offers modeling tools and interfaces for a range of open-source and commercial solvers. However, integrating alternative solvers requires additional installation steps. For comprehensive instructions on installing these solvers, please refer to the table below, which directs you to their required versions respective websites.</p>
+<p>In addition to the default linear programming solver <code class="docutils literal notranslate"><span class="pre">scipy.optimize</span></code>, RSOME offers modeling tools and interfaces for a range of open-source and commercial solvers. However, integrating alternative solvers requires additional installation steps. For comprehensive instructions on installing these solvers, please refer to the following table, which directs you to their required versions respective websites.</p>
 <table class="colwidths-auto table">
 <thead>
 <tr class="row-odd"><th class="text-left head"><p>Solver</p></th>
@@ -539,7 +550,7 @@ Objective: 22.4
 <div class="cell_output docutils container">
 <div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by Mosek...
 Solution status: Optimal
-Running time: 0.0208s
+Running time: 0.0302s
 </pre></div>
 </div>
 </div>

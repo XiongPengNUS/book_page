@@ -1,0 +1,837 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+    <title>RSOME for Robust Optimization &#8212; Robust Stochastic Optimization Made Easy</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_ro';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application Examples" href="examples.html" />
+    <link rel="prev" title="Logistic Regression" href="example_logit.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="homepage.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Modeling Toolbox</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="homepage.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="documentation.html" class="nav-link">Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">RSOME for...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="rsome-for-robust-optimization">
+<h1>RSOME for Robust Optimization<a class="headerlink" href="#rsome-for-robust-optimization" title="Permalink to this heading">#</a></h1>
+<section id="general-framework-for-robust-optimization-models">
+<span id="rsome-ro-ro-framework"></span><h2>General Framework for Robust Optimization Models<a class="headerlink" href="#general-framework-for-robust-optimization-models" title="Permalink to this heading">#</a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">rsome.ro</span></code> module within RSOME is specifically crafted for robust optimization problems. This module features specialized modeling tools that enable the specification of random variables, uncertainty sets, and objective functions or constraints, accounting for worst-case realizations stemming from the uncertainty set. Let <span class="math notranslate nohighlight">\(\pmb{z}\in\mathbb{R}^J\)</span> represent a vector of random variables, <span class="math notranslate nohighlight">\(\pmb{x}\in\mathbb{R}^{I_x}\)</span> denote the here-and-now decision made before the uncertainty unfolds, and <span class="math notranslate nohighlight">\(\pmb{y}(\pmb{z})\in\mathbb{R}^{I_y}\)</span> signify the wait-and-see decision made afterwards. Models supported by the <code class="docutils literal notranslate"><span class="pre">ro</span></code> module can be expressed in the following general format:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\min~&amp;\max\limits_{\pmb{z}\in\mathcal{Z}_0}\left\{
+\pmb{a}_0^{\top}(\pmb{z})\pmb{x} + \pmb{b}_0^{\top}\pmb{y}(\pmb{z}) + \pmb{c}_0(\pmb{z})
+\right\} \\
+\text{s.t.}~&amp;\max\limits_{\pmb{z}\in\mathcal{Z}_m}\left\{
+\pmb{a}_m^{\top}(\pmb{z})\pmb{x} + \pmb{b}_m^{\top}\pmb{y}(\pmb{z}) + \pmb{c}_m(\pmb{z})
+\right\} \leq 0 &amp;&amp;\forall m \in \mathcal{M}\\
+&amp;y_i \in \mathcal{L}(\mathcal{J}_i) &amp;&amp;\forall i \in [I_y] \\
+&amp;\pmb{x}\in\mathcal{X}.
+\end{align}
+\end{split}\]</div>
+<p>In this context, <span class="math notranslate nohighlight">\(\mathcal{X}\subseteq \mathbb{R}^{I_x}\)</span> represents a conic-representable feasible set for <span class="math notranslate nohighlight">\(\pmb{x}\)</span>, <span class="math notranslate nohighlight">\(\pmb{b}_m \in \mathbb{R}^{I_y}\)</span> (for <span class="math notranslate nohighlight">\(m\in\mathcal{M}_1 \cup \{0\}\)</span>) serves as fixed parameters for <span class="math notranslate nohighlight">\(\pmb{y}\)</span>, and the uncertain parameters <span class="math notranslate nohighlight">\(\pmb{a}_m(\pmb{z})\)</span> and <span class="math notranslate nohighlight">\(c_m(\pmb{z})\)</span> are characterized as affine mappings of the random variable <span class="math notranslate nohighlight">\(\pmb{z}\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[
+\pmb{a}_m(\pmb{z}) := \pmb{a}_m^0 + \sum\limits_{j\in[J]}\pmb{a}_m^jz_j \text{   and   }c_m(\pmb{z}) := c_m^0 + \sum\limits_{j\in[J]}c_m^jz_j,
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\pmb{a}_m^j\in\mathbb{R}^{I_x}\)</span> and <span class="math notranslate nohighlight">\(c_m^j\in\mathbb{R}\)</span>, indexed by <span class="math notranslate nohighlight">\(j\in[J]\cup\{0\}\)</span> and <span class="math notranslate nohighlight">\(m\in\mathcal{M}\cup \{0\}\)</span>, are proper coefficients.</p>
+<p>The wait-and-see decision <span class="math notranslate nohighlight">\(\pmb{y}\)</span> potentially representing an arbitrary functional dependence on the uncertainty realization <span class="math notranslate nohighlight">\(\pmb{z}\)</span>, is inherently infinite-dimensional, posing challenges for optimization. To enhance tractability, a prevalent technique in robust optimization is the adoption of a linear decision rule (or affine decision rule). This involves constraining <span class="math notranslate nohighlight">\(\pmb{y}\)</span> to simpler and more easily optimized affine functions, expressed in the following form:</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{L}(\mathcal{J}) := \left\{
+y: \mathbb{R}^{|\mathcal{J}|} \mapsto \mathbb{R}\left|
+y(\pmb{z}) = y^0 + \sum\limits_{j\in\mathcal{J}}y^jz_j
+\right.
+\right\}.
+\]</div>
+<p>The RSOME package offers comprehensive algebraic tools for the explicit definition of the random variable <span class="math notranslate nohighlight">\(\pmb{z}\)</span>, uncertainty sets <span class="math notranslate nohighlight">\(\mathcal{Z}_m\)</span>, adaptive decision <span class="math notranslate nohighlight">\(\pmb{y}\)</span>, and its corresponding affine adaptive rules <span class="math notranslate nohighlight">\(\mathcal{L}(\mathcal{J}_i)\)</span>. These tools enable users to specify the worst-case objective and constraints given in the robust optimization framework above.</p>
+</section>
+<section id="random-variables-and-uncertainty-sets">
+<span id="rsome-ro-rvar-uset"></span><h2>Random Variables and Uncertainty Sets<a class="headerlink" href="#random-variables-and-uncertainty-sets" title="Permalink to this heading">#</a></h2>
+<p>Similar to the array-like decision variables, random variables of RSOME robust models are also defined as arrays using the <code class="docutils literal notranslate"><span class="pre">rvar()</span></code> method. The shape of the variable array is determined by an input integer or tuple, as illustrated by the examples below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>                              <span class="c1"># 3 random variables as a 1D array</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>                         <span class="c1"># 3x5 random variables as a 2D array</span>
+<span class="n">w</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>                   <span class="c1"># 2x3x4x5 random variables as a 4D array</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>All array operations, convex functions, and NumPy-style syntax for decision variables can also be applied to random variables in defining uncertainty sets. For example, let <span class="math notranslate nohighlight">\(\pmb{z}\in\mathbb{R}^5\)</span> be the vector of five random variables, an uncertainty set <span class="math notranslate nohighlight">\(\mathcal{Z}_0=\left\{\pmb{z}\left|\|\pmb{z}\|_{\infty}\leq 1, \|\pmb{z}\|_1 \leq 1.5 \right.\right\}\)</span> can be defined as <code class="docutils literal notranslate"><span class="pre">z_set0</span></code> in the following code segment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">norm</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>                              <span class="c1"># create a model object</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                               <span class="c1"># 5 random variables as an 1D array</span>
+
+<span class="n">z_set0</span> <span class="o">=</span> <span class="p">(</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span>                 <span class="c1"># the infinity-norm constraint</span>
+          <span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.5</span><span class="p">)</span>                    <span class="c1"># the one-norm constraint</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that an uncertainty set is a collection of constraints, written as an iterable Python object, such as tuple or list. These constraints are then used in specifying the worst-case objective function and constraints, which are introduced in the next section.</p>
+</section>
+<section id="the-worst-case-objective-and-constraints">
+<span id="rsome-ro-ro-worst-case"></span><h2>The Worst-Case Objective and Constraints<a class="headerlink" href="#the-worst-case-objective-and-constraints" title="Permalink to this heading">#</a></h2>
+<p>In addition to specifying a deterministic objective function using the <code class="docutils literal notranslate"><span class="pre">min()</span></code> or <code class="docutils literal notranslate"><span class="pre">max()</span></code> method, the RSOME model also accommodates the definition of the worst-case objective over a designated uncertainty set through the <code class="docutils literal notranslate"><span class="pre">minmax()</span></code> or <code class="docutils literal notranslate"><span class="pre">maxmin()</span></code> method. Taking the <code class="docutils literal notranslate"><span class="pre">minmax()</span></code> function as an example, it minimizes the worst-case objective function provided as the first input argument, over an uncertainty set <span class="math notranslate nohighlight">\(\mathcal{Z}_0\)</span> defined by the remaining arguments, as demonstrated by the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>   
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                                <span class="c1"># 5 decision variables as a 1D array</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                                <span class="c1"># 5 random variables as a 1D array</span>
+
+<span class="n">zset0</span> <span class="o">=</span> <span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span>               <span class="c1"># first constraint of the uncertainty set</span>
+        <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.5</span><span class="p">)</span>                   <span class="c1"># second constraint of the uncertainty set</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minmax</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">z</span><span class="p">,</span>                              <span class="c1"># minimize the objective </span>
+             <span class="n">zset0</span><span class="p">)</span>                              <span class="c1"># over the uncertaitny set z_set0     </span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Alternatively, the uncertainty set can be defined by separate constraints given as the inputs of the <code class="docutils literal notranslate"><span class="pre">minmax()</span></code> method.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>   
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                                <span class="c1"># 5 decision variables as a 1D array</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                                <span class="c1"># 5 random variables as a 1D array</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minmax</span><span class="p">(</span><span class="n">x</span> <span class="o">@</span> <span class="n">z</span><span class="p">,</span>                              <span class="c1"># minimize the objective </span>
+             <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">inf</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">,</span>           <span class="c1"># frist constraint of the uncertainty set</span>
+             <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.5</span><span class="p">)</span>              <span class="c1"># second constraint of the uncertainty set </span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">maxmin()</span></code> function works in the similar way in maximizing the worst-case objective function over a given uncertainty set <span class="math notranslate nohighlight">\(\mathcal{Z}_0\)</span>.</p>
+<p>Similar to deterministic constraints, the worst-case constraints can be defined using the NumPy-style array operations, and the designated uncertainty set <span class="math notranslate nohighlight">\(\mathcal{Z}_0\)</span> is specified through the <code class="docutils literal notranslate"><span class="pre">forall()</span></code> method of the constraint, as illustrated by the sample code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>   
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">zset0</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.5</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                               <span class="c1"># maximize the objective function</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">((</span><span class="n">x</span> <span class="o">*</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">zset0</span><span class="p">))</span>             <span class="c1"># the worst-case constraint is satisfied over zset0</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">((</span><span class="n">x</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">zset0</span><span class="p">))</span>           <span class="c1"># the worst-case constraint is satisfied over zset0    </span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">zsetm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">((</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">z</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">zsetm</span><span class="p">))</span>   <span class="c1"># the worst-case constraint is satisfied over zsetm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Note that if the uncertainty set of a robust constraint is unspecified, then by default, its uncertainty set is <span class="math notranslate nohighlight">\(\mathcal{Z}_0\)</span>, defined by the <code class="docutils literal notranslate"><span class="pre">minmax()</span></code> or <code class="docutils literal notranslate"><span class="pre">maxmin()</span></code> methods for the worst-case objective. The sample code above is hence equivalent to the following code segment.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>   
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">zset0</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mf">1.5</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">maxmin</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span>                            <span class="c1"># maximize the objective function</span>
+             <span class="n">zset0</span><span class="p">)</span>                              <span class="c1"># the default uncertainty set is defined to be zset0</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mi">2</span><span class="p">)</span>                             <span class="c1"># the worst-case constraint is satisfied over zset0</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="o">*</span><span class="n">z</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>                           <span class="c1"># the worst-case constraint is satisfied over zset0    </span>
+
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">6</span><span class="p">):</span>
+    <span class="n">zsetm</span> <span class="o">=</span> <span class="n">norm</span><span class="p">(</span><span class="n">z</span><span class="p">,</span> <span class="mi">2</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">i</span><span class="o">*</span><span class="mf">0.5</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">((</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="n">z</span><span class="p">[:</span><span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">zsetm</span><span class="p">))</span>   <span class="c1"># the worst-case constraint is satisfied over zsetm</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The provided code demonstrates that the Python version of RSOME excels in specifying various uncertainty sets <span class="math notranslate nohighlight">\(\mathcal{Z}_m\)</span>, where <span class="math notranslate nohighlight">\(m\in\mathcal{M}\cup {0}\)</span> denotes the objective function (for <span class="math notranslate nohighlight">\(m=0\)</span>) and each constraint (for <span class="math notranslate nohighlight">\(m \in \mathcal{M}\)</span>). This framework exhibits greater flexibility compared to its MATLAB counterpart as introduced by <span id="id1">[<a class="reference internal" href="#id7" title="Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. Management Science, 66(8):3329–3339, 2020.">CSX20</a>]</span>. It is adept at addressing a great variety of robust models, including the distributional interpretation of robust formulation in <span id="id2">[<a class="reference internal" href="#id14" title="Huan Xu, Constantine Caramanis, and Shie Mannor. A distributional interpretation of robust optimization. Mathematics of Operations Research, 37(1):95–110, 2012.">XCM12</a>]</span>, the concept of Pareto robustly optimal solutions as discussed in <span id="id3">[<a class="reference internal" href="#id15" title="Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. Mathematical Programming, 160:531–545, 2016.">DRBdH16</a>]</span>, and the sample robust optimization models proposed by <span id="id4">[<a class="reference internal" href="#id16" title="Dimitris Bertsimas, Shimrit Shtern, and Bradley Sturt. Two-stage sample robust optimization. Operations Research, 70(1):624–640, 2022.">BSS22</a>]</span>.</p>
+</section>
+<section id="linear-decision-rules-for-adaptive-decision-making">
+<span id="rsome-ro-ro-decision-rule"></span><h2>Linear Decision Rules for Adaptive Decision-Making<a class="headerlink" href="#linear-decision-rules-for-adaptive-decision-making" title="Permalink to this heading">#</a></h2>
+<p>In this section, we delve into addressing the wait-and-see decision <span class="math notranslate nohighlight">\(\pmb{y}\)</span> that appears in multi-stage robust models. These wait-and-see decisions are established as arrays with specified shapes by invoking the <code class="docutils literal notranslate"><span class="pre">ldr()</span></code> method of the RSOME <code class="docutils literal notranslate"><span class="pre">ro</span></code> model object. This approach closely mirrors the methods previously introduced for creating arrays of decision and random variables, as illustrated by the sample code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ldr</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>                            <span class="c1"># 2x4 decision rule variables as a 2D array</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ldr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">5</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>                         <span class="c1"># 3x5x4 decision rule variables as a 3D array</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>2x4 decision rule variables
+3x5x4 decision rule variables
+</pre></div>
+</div>
+</div>
+</div>
+<p>Each adaptive decision <span class="math notranslate nohighlight">\(y_i\)</span> has the capacity to affinely adapt to random variables through the specified linear decision rule <span class="math notranslate nohighlight">\(\mathcal{L}(\mathcal{J}_i)\)</span>, thereby enabling the derivation of an equivalent optimization format that is amenable to tractable solutions. The following code shows how the decision rules are specified using the indexing or slicing of variable arrays.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">((</span><span class="mi">2</span><span class="p">,</span> <span class="mi">4</span><span class="p">))</span>                           <span class="c1"># 2x4 random variables as a 2D array</span>
+<span class="n">v</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>                                <span class="c1"># 5 random variables as a 1D array</span>
+
+<span class="n">x</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>                                       <span class="c1"># all elements of x depends on all u elements</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">u</span><span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">])</span>                       <span class="c1"># y[2, 3:, :] depends on u[0, 1]</span>
+<span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">3</span><span class="p">:,</span> <span class="p">:]</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="mi">3</span><span class="p">:])</span>                         <span class="c1"># y[1, 3:, :] depends on v[3:]</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Upon the creation of decision rules and the specification of their affine dependencies on random variables, the array operations and syntax introduced earlier can be employed for constructing the worst-case objective or constraints involving adaptive decisions. It is imperative to note that the affine dependency must be explicitly specified before utilizing decision rule variables in constraints; failure to do so will result in an error message.</p>
+<p>Finally, after the model is solved, coefficients of a decision rule <code class="docutils literal notranslate"><span class="pre">y</span></code> that affinely adapts to random variable <code class="docutils literal notranslate"><span class="pre">z</span></code> could be accessed by the <code class="docutils literal notranslate"><span class="pre">get()</span></code> method. More specifically:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">y.get()</span></code> returns the constant coefficients of the decision rule y. The returned array has the same shape as the decision rule array y.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">y.get(z)</span></code> returns the linear coefficients of <code class="docutils literal notranslate"><span class="pre">y</span></code> with respect to the random variable <code class="docutils literal notranslate"><span class="pre">z</span></code>. The shape of the returned array is <code class="docutils literal notranslate"><span class="pre">y.shape</span> <span class="pre">+</span> <span class="pre">z.shape</span></code>, <em>i.e.</em>, the combination of dimensions of <code class="docutils literal notranslate"><span class="pre">y</span></code> and <code class="docutils literal notranslate"><span class="pre">z</span></code>. For example, if <code class="docutils literal notranslate"><span class="pre">c</span> <span class="pre">=</span> <span class="pre">y.get(z)</span></code> where <code class="docutils literal notranslate"><span class="pre">y.dim=2</span></code> and <code class="docutils literal notranslate"><span class="pre">z.dim=2</span></code>, the returned coefficients are presented as a four-dimensional array <code class="docutils literal notranslate"><span class="pre">c</span></code> and <code class="docutils literal notranslate"><span class="pre">c[i,</span> <span class="pre">j]</span></code> gives the linear coefficients of <code class="docutils literal notranslate"><span class="pre">y[i,</span> <span class="pre">j]</span></code> with respect to the random variable <code class="docutils literal notranslate"><span class="pre">z</span></code>.</p></li>
+</ul>
+</section>
+<section id="solution-analysis">
+<span id="rsome-ro-sol-analysis"></span><h2>Solution Analysis<a class="headerlink" href="#solution-analysis" title="Permalink to this heading">#</a></h2>
+<p>After an RSOME model is successfully solved, affine or convex (concave) expressions of decision variables can be evaluated under the optimal solution as callable functions. Consider the adaptive robust optimization model below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span> <span class="nn">rsome</span> <span class="k">as</span> <span class="nn">rso</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.2</span><span class="p">,</span> <span class="o">-</span><span class="mf">0.3</span><span class="p">])</span>
+<span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>                                <span class="c1"># x is a here-and-now decision</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">()</span>                                 <span class="c1"># z is a random variable</span>
+<span class="n">uset</span> <span class="o">=</span> <span class="p">(</span><span class="n">z</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>                          <span class="c1"># uncertainty set</span>
+
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ldr</span><span class="p">()</span>                                  <span class="c1"># y is an affine decision rule</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>                                       <span class="c1"># y affinely adapts to z</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="n">c</span><span class="nd">@x</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">y</span>                                  <span class="c1"># objective function</span>
+<span class="n">model</span><span class="o">.</span><span class="n">maxmin</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">uset</span><span class="p">)</span>                          <span class="c1"># define the objective function</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">1</span><span class="p">)</span>                    <span class="c1"># define a constraint</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span> <span class="o">==</span> <span class="n">z</span> <span class="o">+</span> <span class="mf">2.5</span><span class="p">)</span>                           <span class="c1"># define another constraint</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>                                    <span class="c1"># solve the model using the default solver</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the default LP solver...
+Solution status: 0
+Running time: 0.0024s
+</pre></div>
+</div>
+</div>
+</div>
+<p>Apparently, the optimal solution of x is an array <span class="math notranslate nohighlight">\((0, 0, -1)\)</span>, and in the following code segment, expressions <code class="docutils literal notranslate"><span class="pre">lin_expr</span></code>, <code class="docutils literal notranslate"><span class="pre">abs_expr</span></code>, and <code class="docutils literal notranslate"><span class="pre">norm_expr</span></code> are callable functions and their values are evaluated under the optimal value of <code class="docutils literal notranslate"><span class="pre">x</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">lin_expr</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">-</span> <span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                         <span class="c1"># a linear expression of x </span>
+<span class="n">abs_expr</span> <span class="o">=</span> <span class="mf">5.0</span> <span class="o">-</span> <span class="nb">abs</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>                    <span class="c1"># an expression of absolute values</span>
+<span class="n">norm_expr</span> <span class="o">=</span> <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>                       <span class="c1"># a one-norm expression</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;</span><span class="si">{</span><span class="n">lin_expr</span><span class="p">()</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">abs_expr</span><span class="p">()</span><span class="si">}</span><span class="s1">, </span><span class="si">{</span><span class="n">norm_expr</span><span class="p">()</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>6.0, 4.0, 1.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>As a special case, <code class="docutils literal notranslate"><span class="pre">x()</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">x.get()</span></code>, which returns the optimal value of x.</p>
+<p>Affine expressions of decision rules or expressions involving random variables can also be evaluated as similar callable functions. The only difference is that values of such expressions are also affected by the realized values of random variables, so we may need to specify the realizations of random variables in calling these functions. For example, the optimal decision rule y in the model above can be written as <span class="math notranslate nohighlight">\(y=z + 2.5\)</span>, its value under <span class="math notranslate nohighlight">\(z=0.5\)</span> is evaluated using the following code,</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">y</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)))</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>3.0
+</pre></div>
+</div>
+</div>
+</div>
+<p>where the realization of a random variable is specified by the <code class="docutils literal notranslate"><span class="pre">assign()</span></code> method. The similar approach can be applied to the variable <code class="docutils literal notranslate"><span class="pre">obj</span></code> defined as the objective function of the model, as shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">obj</span><span class="p">(</span><span class="n">z</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="mf">1.5</span><span class="p">)))</span>                        <span class="c1"># The value of obj = c@x + 2*y when z = 1.5</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>8.3
+</pre></div>
+</div>
+</div>
+</div>
+<p>If the realization of a random variable is unspecified, its value is assumed to be zero by default in evaluating the expressions. As a result, <code class="docutils literal notranslate"><span class="pre">y()</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">y.get()</span></code> as they both return the constant term of the optimal linear decision rule.</p>
+</section>
+<section id="application-examples">
+<span id="rsome-ro-examples"></span><h2>Application Examples<a class="headerlink" href="#application-examples" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p>Robust Portfolio</p></li>
+<li><p>Conditional Value-at-Risk in Robust Portfolio Management</p></li>
+<li><p>Adaptive Robust Lot-Sizing</p></li>
+<li><p>Joint Production-Inventory Management</p></li>
+<li><p>Robust Vehicle Pre-Allocation</p></li>
+</ul>
+<br>
+<br>
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id5">
+<dl class="citation">
+<dt class="label" id="id16"><span class="brackets"><a class="fn-backref" href="#id4">BSS22</a></span></dt>
+<dd><p>Dimitris Bertsimas, Shimrit Shtern, and Bradley Sturt. Two-stage sample robust optimization. <em>Operations Research</em>, 70(1):624–640, 2022.</p>
+</dd>
+<dt class="label" id="id7"><span class="brackets"><a class="fn-backref" href="#id1">CSX20</a></span></dt>
+<dd><p>Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. <em>Management Science</em>, 66(8):3329–3339, 2020.</p>
+</dd>
+<dt class="label" id="id15"><span class="brackets"><a class="fn-backref" href="#id3">DRBdH16</a></span></dt>
+<dd><p>Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. <em>Mathematical Programming</em>, 160:531–545, 2016.</p>
+</dd>
+<dt class="label" id="id14"><span class="brackets"><a class="fn-backref" href="#id2">XCM12</a></span></dt>
+<dd><p>Huan Xu, Constantine Caramanis, and Shie Mannor. A distributional interpretation of robust optimization. <em>Mathematics of Operations Research</em>, 37(1):95–110, 2012.</p>
+</dd>
+</dl>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_logit.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Logistic Regression</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Application Examples</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<p class="component-author">
+By Zhi Chen, Melvyn Sim, Peng Xiong
+</p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

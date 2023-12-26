@@ -15,5 +15,6 @@ chapters:
     - file: example_max_box
     - file: example_min_ellipsoid
     - file: example_logit
+    - file: rsome_ro
 - file: examples
 - file: contact
