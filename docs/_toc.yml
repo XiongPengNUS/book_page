@@ -16,5 +16,11 @@ chapters:
     - file: example_min_ellipsoid
     - file: example_logit
     - file: rsome_ro
+    - file: example_ro_mean_var_portfolio
+    - file: example_ro_portfolio
+    - file: example_robust_cvar_portfolio
+    - file: example_aro_lot_sizing
+    - file: example_ro_inventory_management
+    - file: example_ro_medical_app
 - file: examples
 - file: contact

@@ -1,0 +1,793 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17: http://docutils.sourceforge.net/" />
+
+    <title>Robust Inventory Management &#8212; Robust Stochastic Optimization Made Easy</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=5b4479735964841361fd" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=5b4479735964841361fd" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.1.2/css/all.min.css?digest=5b4479735964841361fd" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.1.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=5b4479735964841361fd" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd" />
+  <script src="_static/vendor/fontawesome/6.1.2/js/all.min.js?digest=5b4479735964841361fd"></script>
+
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    <script src="_static/clipboard.min.js"></script>
+    <script src="_static/copybutton.js"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'example_ro_inventory_management';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Robust Medical Appointment Scheduling" href="example_ro_medical_app.html" />
+    <link rel="prev" title="Adaptive Robust Lot-Sizing" href="example_aro_lot_sizing.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <a class="skip-link" href="#main-content">Skip to main content</a>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>
+    Back to top
+  </button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__primary"
+          id="__primary"/>
+  <label class="overlay overlay-primary" for="__primary"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          name="__secondary"
+          id="__secondary"/>
+  <label class="overlay overlay-secondary" for="__secondary"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search..."
+         aria-label="Search..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+  
+    <nav class="bd-header navbar navbar-expand-lg bd-navbar">
+<div class="bd-header__inner bd-page-width">
+  <label class="sidebar-toggle primary-toggle" for="__primary">
+    <span class="fa-solid fa-bars"></span>
+  </label>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+
+<a class="navbar-brand logo" href="homepage.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/logolight.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/logodark.png" class="logo__image only-dark" alt=""/>`);</script>
+  
+  
+    <p class="title logo__title">Modeling Toolbox</p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+ <script>
+ document.write(`
+   <button class="btn navbar-btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script>
+    </div>
+  
+
+  
+</div>
+
+    </nav>
+  
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      <div class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          <div class="navbar-item">
+<nav class="navbar-nav">
+  <p class="sidebar-header-items__title"
+     role="heading"
+     aria-level="1"
+     aria-label="Site Navigation">
+    Site Navigation
+  </p>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="install.html">
+                        Install
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item current active">
+                      <a class="nav-link nav-internal" href="documentation.html">
+                        Documentation
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="examples.html">
+                        Application Examples
+                      </a>
+                    </li>
+                
+
+                    <li class="nav-item">
+                      <a class="nav-link nav-internal" href="contact.html">
+                        Contact Us
+                      </a>
+                    </li>
+                
+  </ul>
+</nav></div>
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<script>
+document.write(`
+  <button class="btn btn-sm navbar-btn theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="theme-switch nav-link" data-mode="light"><i class="fa-solid fa-sun fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="dark"><i class="fa-solid fa-moon fa-lg"></i></span>
+    <span class="theme-switch nav-link" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg"></i></span>
+  </button>
+`);
+</script></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links navbar-nav"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><span><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i></span>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+
+
+<nav aria-label="Breadcrumb">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="homepage.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="documentation.html" class="nav-link">Documentation</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">Robust...</li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article" role="main">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="robust-inventory-management">
+<span id="ro-inventory-management-title"></span><h1>Robust Inventory Management<a class="headerlink" href="#robust-inventory-management" title="Permalink to this heading">#</a></h1>
+<p>In this case study, we consider a single-product inventory management problem discussed in <span id="id1">[<a class="reference internal" href="#id24" title="Aharon Ben-Tal, Alexander Goryashko, Elana Guslitzer, and Arkadi Nemirovski. Adjustable robust solutions of uncertain linear programs. Mathematical programming, 99(2):351–376, 2004.">BTGGN04</a>]</span>, where there are one warehouse and <span class="math notranslate nohighlight">\(I\)</span> factories. The production decision <span class="math notranslate nohighlight">\(\pmb{p}\in\mathbb{R}^{I\times T}\)</span> is made for totally <span class="math notranslate nohighlight">\(T\)</span> periods, and in each period <span class="math notranslate nohighlight">\(t\)</span>:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(c_{it}\)</span> is the cost of producing a unit of the product at a factory <span class="math notranslate nohighlight">\(i\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(d_t^0\)</span> is the nominal demand for the product.</p></li>
+</ul>
+<p>Other parameters are:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(P_i\)</span> is the maximum production capacity of the <span class="math notranslate nohighlight">\(i\)</span>th factory;</p></li>
+<li><p><span class="math notranslate nohighlight">\(Q_i\)</span> is the maximum cumulative production capacity of the <span class="math notranslate nohighlight">\(i\)</span>th factory throughout the planning horizon.</p></li>
+<li><p><span class="math notranslate nohighlight">\(V_{\min}\)</span> is the minimum allowed level of inventory at the warehouse;</p></li>
+<li><p><span class="math notranslate nohighlight">\(V_{\max}\)</span> is the maximum allowed level of inventory at the warehouse;</p></li>
+</ul>
+<p>It is assumed that the demand of the product is uncertain and is characterized by the following box uncertainty set</p>
+<div class="math notranslate nohighlight">
+\[
+\mathcal{U} = \prod\limits_{t=1}^T [d_t^0 - \theta d_t^0, d_t^0 + \theta d_t^0],
+\]</div>
+<p>where <span class="math notranslate nohighlight">\(\theta\)</span> is coefficient capturing the maximum relative deviation of the random demand from the nominal value. Here, we follow <span id="id2">[<a class="reference internal" href="#id24" title="Aharon Ben-Tal, Alexander Goryashko, Elana Guslitzer, and Arkadi Nemirovski. Adjustable robust solutions of uncertain linear programs. Mathematical programming, 99(2):351–376, 2004.">BTGGN04</a>]</span> in configuring the problem for determining the production decision <span class="math notranslate nohighlight">\(\pmb{p}\)</span> for <span class="math notranslate nohighlight">\(I=3\)</span> factories over  <span class="math notranslate nohighlight">\(T=24\)</span> time steps. These parameters are defined by the code segment below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="mi">24</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">I</span> <span class="o">=</span> <span class="mi">3</span>
+<span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">I</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">d0</span> <span class="o">=</span> <span class="mi">1000</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">12</span><span class="p">))</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="p">(</span><span class="mf">0.5</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">i</span><span class="p">)</span><span class="o">.</span><span class="n">reshape</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="p">(</span><span class="n">t</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span><span class="o">/</span><span class="mi">12</span><span class="p">))</span>
+
+<span class="n">P</span> <span class="o">=</span> <span class="mi">567</span>
+<span class="n">Q</span> <span class="o">=</span> <span class="mi">13600</span>
+<span class="n">Vmin</span> <span class="o">=</span> <span class="mi">500</span>
+<span class="n">Vmax</span> <span class="o">=</span> <span class="mi">2000</span>
+<span class="n">v0</span> <span class="o">=</span> <span class="mi">500</span>
+
+<span class="n">theta</span> <span class="o">=</span> <span class="mf">0.2</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The inventory management problem is solved as the following robust optimization model</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\min~&amp;\max\limits_{\pmb{d}\in\mathcal{U}}\sum\limits_{t=1}^{T}\sum\limits_{i=1}^I c_{it}p_{it}(\pmb{d}) \\
+\text{s.t.}~&amp;\min\limits_{\pmb{d}\in\mathcal{U}}p_{it}(\pmb{d}) \geq 0 &amp;&amp; i\in [I]\text{ and }t\in [T] \\
+&amp;\max\limits_{\pmb{d}\in\mathcal{U}}p_{it}(\pmb{d})\leq P_{it}&amp;&amp; i\in [I]\text{ and }t\in [T] \\
+&amp;\max\limits_{\pmb{d}\in\mathcal{U}}\sum\limits_{t=1}^{T}p_{it}(\pmb{d}) \leq Q_i &amp;&amp; i\in [I]\\
+&amp;\min\limits_{\pmb{d}\in\mathcal{U}}\left(v_0 + \sum\limits_{\tau=1}^{t-1}\sum\limits_{i=1}^Ip_{i\tau}(\pmb{d}) - \sum\limits_{\tau=1}^{t-1}\right) \geq V_{\min} &amp;&amp; t\in [T] \\
+&amp;\max\limits_{\pmb{d}\in\mathcal{U}}\left(v_0 + \sum\limits_{\tau=1}^{t-1}\sum\limits_{i=1}^Ip_{i\tau}(\pmb{d}) - \sum\limits_{\tau=1}^{t-1}\right) \leq V_{\max} &amp;&amp;t\in [T]
+\end{align}
+\end{split}\]</div>
+<p>where the adaptive decision <span class="math notranslate nohighlight">\(p_{it}(\pmb{d})\)</span> is approximated by the affine function</p>
+<div class="math notranslate nohighlight">
+\[
+p_{it}(\pmb{d}) = p_{it}^0 + \sum\limits_{\tau \in [t-1]}p_{it}^{\tau}d_{\tau},
+\]</div>
+<p>implying that the production decision <span class="math notranslate nohighlight">\(p_{it}\)</span> affinely depends to uncertain demands up until time step <span class="math notranslate nohighlight">\(t-1\)</span>. In other words, it follows the affine decision rule <span class="math notranslate nohighlight">\(\mathcal{L}([t - 1])\)</span>.</p>
+<p>The robust model can be then solved using the RSOME package as below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="n">uset</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">d0</span><span class="p">,</span> 
+        <span class="n">d</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">d0</span><span class="p">)</span>
+
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ldr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span> 
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+    <span class="n">p</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="p">])</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minmax</span><span class="p">((</span><span class="n">c</span><span class="o">*</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">(),</span> <span class="n">uset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="n">P</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">Q</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">Vmin</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">Vmax</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the default LP solver...
+Solution status: 0
+Running time: 0.8551s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The objective value is given as below, which is consistent with the results provided in <span id="id3">[<a class="reference internal" href="rsome_ro.html#id15" title="Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. Mathematical Programming, 160:531–545, 2016.">DRBdH16</a>]</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">wc_cost</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective: </span><span class="si">{</span><span class="n">wc_cost</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective: 44272.827
+</pre></div>
+</div>
+</div>
+</div>
+<p>Besides returning the objective value, the RSOME package also provides solution analysis tools for investigating the optimal solution of <span class="math notranslate nohighlight">\(\pmb{p}(\pmb{d})\)</span>. Notice that the adaptive decision <span class="math notranslate nohighlight">\(\pmb{p}(\pmb{d})\)</span> is an affine function of the random demand <span class="math notranslate nohighlight">\(\pmb{d}\)</span>, so the value of <span class="math notranslate nohighlight">\(\pmb{d}\)</span> must be provided for retrieving the optimal production decision, see the sample code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">d0</span><span class="p">))</span>                 <span class="c1"># The production schedule under the nominal demand</span>
+<span class="n">p_max</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">d0</span> <span class="o">+</span> <span class="n">theta</span><span class="o">*</span><span class="n">d0</span><span class="p">))</span>   <span class="c1"># The production schedule under the maximum demand</span>
+<span class="n">p_min</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">d0</span> <span class="o">-</span> <span class="n">theta</span><span class="o">*</span><span class="n">d0</span><span class="p">))</span>   <span class="c1"># The production schedule under the minimum demand</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We can then plot the production decision under the nominal demand as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+
+<span class="n">periods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">periods</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">+</span> <span class="n">p0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$p_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">bottom</span> <span class="o">+=</span> <span class="n">p0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Product Order&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/8e2e5939a627fdc8bbcf93e786bb670353292d062a591d4ef65d59b2116cbed4.png" src="_images/8e2e5939a627fdc8bbcf93e786bb670353292d062a591d4ef65d59b2116cbed4.png" />
+</div>
+</div>
+<p>We can also calculate the inventory level throughout the planning horizon using the <code class="docutils literal notranslate"><span class="pre">inventory_value()</span></code> function defined below, where the input argument <code class="docutils literal notranslate"><span class="pre">dvalue</span></code> specifies the realization of the random demand <span class="math notranslate nohighlight">\(\pmb{d}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">inventory_value</span><span class="p">(</span><span class="n">dvalue</span><span class="p">):</span>
+    
+    <span class="k">return</span> <span class="n">v0</span> <span class="o">+</span> <span class="p">(</span><span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dvalue</span><span class="p">))</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">dvalue</span><span class="p">)</span><span class="o">.</span><span class="n">cumsum</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The figure below depicts the inventory levels in the nominal case and under the maximum and minimum demands.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">inv0</span> <span class="o">=</span> <span class="n">inventory_value</span><span class="p">(</span><span class="n">d0</span><span class="p">)</span>
+<span class="n">inv_max</span> <span class="o">=</span> <span class="n">inventory_value</span><span class="p">(</span><span class="n">d0</span> <span class="o">+</span> <span class="n">theta</span><span class="o">*</span><span class="n">d0</span><span class="p">)</span>
+<span class="n">inv_min</span> <span class="o">=</span> <span class="n">inventory_value</span><span class="p">(</span><span class="n">d0</span> <span class="o">-</span> <span class="n">theta</span><span class="o">*</span><span class="n">d0</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">Vmin</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">hlines</span><span class="p">(</span><span class="n">Vmax</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="n">T</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">,</span> <span class="n">linestyle</span><span class="o">=</span><span class="s1">&#39;--&#39;</span><span class="p">,</span> 
+           <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Bounds of Inventory Levels&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv0</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nominal Case&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_max</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Maximum Demand&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">inv_min</span><span class="p">,</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Minimum Demand&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">,</span> <span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Inventory&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/10656e9d9509c0ef758c536c63c1bcdb9c87a02c45f2084b5781ca8e7114a313.png" src="_images/10656e9d9509c0ef758c536c63c1bcdb9c87a02c45f2084b5781ca8e7114a313.png" />
+</div>
+</div>
+<p>As demonstrated in <span id="id4">[<a class="reference internal" href="rsome_ro.html#id15" title="Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. Mathematical Programming, 160:531–545, 2016.">DRBdH16</a>]</span>, this robust production-inventory problem can have multiple optimal solutions. All these optimal robust solutions share the same worst-case objective value, yet the affine decision rule <span class="math notranslate nohighlight">\(\pmb{p}(\pmb{d})\)</span> can vary significantly, resulting in divergent performance under non-worst-case realizations. For instance, the use of different solvers to tackle the robust model may yield considerably distinct solutions.</p>
+<p>Here, we reformulate the robust model as described in <span id="id5">[<a class="reference internal" href="rsome_ro.html#id15" title="Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. Mathematical Programming, 160:531–545, 2016.">DRBdH16</a>]</span>, with the objective of minimizing the nominal rather than the worst-case objective value. An additional constraint is introduced to ensure that the worst-case cost does not exceed <code class="docutils literal notranslate"><span class="pre">wc_cost</span></code>, i.e., the optimal cost of the previous robust model. It is noteworthy that the nominal objective can be expressed equivalently as the worst-case cost over an uncertainty set <span class="math notranslate nohighlight">\(\mathcal{Z}_0=\left\{\pmb{d}^0\right\}\)</span>—thus, enforcing <span class="math notranslate nohighlight">\(\pmb{d}\)</span> to align with the nominal trajectory. The resolution of this new robust model is carried out through the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">rsome</span> <span class="kn">import</span> <span class="n">ro</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">T</span><span class="p">)</span>
+<span class="n">uset</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">1</span><span class="o">-</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">d0</span><span class="p">,</span> 
+        <span class="n">d</span> <span class="o">&lt;=</span> <span class="p">(</span><span class="mi">1</span><span class="o">+</span><span class="n">theta</span><span class="p">)</span><span class="o">*</span><span class="n">d0</span><span class="p">)</span>
+<span class="n">uset0</span> <span class="o">=</span> <span class="p">(</span><span class="n">d</span> <span class="o">==</span> <span class="n">d0</span><span class="p">)</span>
+
+<span class="n">a</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+<span class="n">p</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ldr</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="n">T</span><span class="p">))</span> 
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+    <span class="n">p</span><span class="p">[:,</span> <span class="n">t</span><span class="p">]</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="p">])</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minmax</span><span class="p">(</span><span class="n">a</span><span class="p">,</span> <span class="n">uset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(((</span><span class="n">c</span><span class="o">*</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">a</span><span class="p">)</span><span class="o">.</span><span class="n">forall</span><span class="p">(</span><span class="n">uset0</span><span class="p">))</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">((</span><span class="n">c</span><span class="o">*</span><span class="n">p</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">wc_cost</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">p</span><span class="p">,</span> <span class="n">p</span> <span class="o">&lt;=</span> <span class="n">P</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">Q</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">t</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">T</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&gt;=</span> <span class="n">Vmin</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v0</span> <span class="o">+</span> <span class="n">p</span><span class="p">[:,</span> <span class="p">:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">-</span> <span class="n">d</span><span class="p">[:</span><span class="n">t</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">&lt;=</span> <span class="n">Vmax</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the default LP solver...
+Solution status: 0
+Running time: 0.3415s
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the provided code segment, an intermediate variable <code class="docutils literal notranslate"><span class="pre">a</span></code> is introduced to represent the nominal case total cost, which is to be minimized as the model objective. The constraint <code class="docutils literal notranslate"><span class="pre">(c*p).sum()</span> <span class="pre">&lt;=</span> <span class="pre">a</span></code> is imposed under the nominal case uncertainty set <code class="docutils literal notranslate"><span class="pre">uset0</span></code>, defined using the <code class="docutils literal notranslate"><span class="pre">forall()</span></code> method. Other constraints are enforced under the default uncertainty set <code class="docutils literal notranslate"><span class="pre">uset</span></code>, specified through the <code class="docutils literal notranslate"><span class="pre">minmax()</span></code> method in defining of the objective function.</p>
+<p>The objective value printed below is the total production cost under the nominal demand trajectory. Please refer to Table 1 in <span id="id6">[<a class="reference internal" href="rsome_ro.html#id15" title="Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. Mathematical Programming, 160:531–545, 2016.">DRBdH16</a>]</span> to verify the worst-case and nominal production costs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nom_cost</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective: </span><span class="si">{</span><span class="n">nom_cost</span><span class="si">:</span><span class="s1">.3f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective: 35076.737
+</pre></div>
+</div>
+</div>
+</div>
+<p>The optimal schedule under the nominal demand trajectory can also be plotted as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">p0</span> <span class="o">=</span> <span class="n">p</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">d0</span><span class="p">))</span>
+<span class="n">periods</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">T</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">I</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">periods</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">bottom</span> <span class="o">+</span> <span class="n">p0</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span>
+                     <span class="n">label</span><span class="o">=</span><span class="sa">r</span><span class="s1">&#39;$p_</span><span class="si">{}</span><span class="s1">$&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">))</span>
+    <span class="n">bottom</span> <span class="o">+=</span> <span class="n">p0</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Period&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Product Order&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="_images/a1abe81dddafcad24a6e935af0545c1bb4400c67758cdeb10a313667a5f93ca1.png" src="_images/a1abe81dddafcad24a6e935af0545c1bb4400c67758cdeb10a313667a5f93ca1.png" />
+</div>
+</div>
+<p>The comparison reveals that the newly optimized production decision significantly differs from the previous one, despite both resulting in the same worst-case total cost.</p>
+<br>
+<hr class="docutils" />
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id7">
+<dl class="citation">
+<dt class="label" id="id24"><span class="brackets">BTGGN04</span><span class="fn-backref">(<a href="#id1">1</a>,<a href="#id2">2</a>)</span></dt>
+<dd><p>Aharon Ben-Tal, Alexander Goryashko, Elana Guslitzer, and Arkadi Nemirovski. Adjustable robust solutions of uncertain linear programs. <em>Mathematical programming</em>, 99(2):351–376, 2004.</p>
+</dd>
+<dt class="label" id="id17"><span class="brackets">DRBdH16</span><span class="fn-backref">(<a href="#id3">1</a>,<a href="#id4">2</a>,<a href="#id5">3</a>,<a href="#id6">4</a>)</span></dt>
+<dd><p>Frans JCT De Ruiter, Ruud CM Brekelmans, and Dick den Hertog. The impact of the existence of multiple adjustable robust solutions. <em>Mathematical Programming</em>, 160:531–545, 2016.</p>
+</dd>
+</dl>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_aro_lot_sizing.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Adaptive Robust Lot-Sizing</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_ro_medical_app.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Robust Medical Appointment Scheduling</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=5b4479735964841361fd"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=5b4479735964841361fd"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+<p class="component-author">
+By Zhi Chen, Melvyn Sim, Peng Xiong
+</p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2023.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

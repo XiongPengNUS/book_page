@@ -3,7 +3,8 @@ title: "Robust Stochastic Optimization Made Easy"
 version: "1.2.5"
 author: Zhi Chen, Melvyn Sim, Peng Xiong
 copyright: "2023" 
-logo: logo.png
+logo: logolight.png
+logodark: logodark.png
 execute:
   execute_notebooks: off
 
@@ -53,7 +54,8 @@ sphinx:
         #navbar_align: "left"
         secondary_sidebar_items: []
         logo:
-            image_dark: "logo.png"
+            image_light: logolight.png
+            image_dark: logodark.png
             text: Modeling Toolbox
         footer_start: [author]
         footer_end: [copyright]

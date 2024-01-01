@@ -145,8 +145,8 @@ const thebe_selector_output = ".output, .cell_output"
       
     
     
-    <img src="_static/logo.png" class="logo__image only-light" alt=""/>
-    <script>document.write(`<img src="_static/logo.png" class="logo__image only-dark" alt=""/>`);</script>
+    <img src="_static/logolight.png" class="logo__image only-light" alt=""/>
+    <script>document.write(`<img src="_static/logodark.png" class="logo__image only-dark" alt=""/>`);</script>
   
   
     <p class="title logo__title">Modeling Toolbox</p>
@@ -420,7 +420,7 @@ document.write(`
 \[\begin{split}\begin{align}
 \max~&amp;\sum\limits_{i=1}^np_ix_i - \phi \sum\limits_{i=1}^n \sigma_i^2x_i^2 \\
 \text{s.t.}~&amp;\sum\limits_{i=1}^nx_i = 1 \\
-&amp; x_i \geq 0, ~\forall i = 1, 2, ..., n,
+&amp; \pmb{x} \in \mathbb{R}_+^n,
 \end{align}\end{split}\]</div>
 <p>with the constant <span class="math notranslate nohighlight">\(\phi=5\)</span>, and the means and standard deviations are specified as</p>
 <div class="math notranslate nohighlight">
