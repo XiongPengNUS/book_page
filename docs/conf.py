@@ -6,6 +6,10 @@
 # -- Project information -----------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
+import requests
+from datetime import datetime
+
+
 project = 'RSOME'
 copyright = '2026, Melvyn Sim, Zhi Chen, Peng Xiong'
 author = 'Melvyn Sim, Zhi Chen, Peng Xiong'
@@ -82,3 +86,34 @@ suppress_warnings = [
 
 # Disable execution of ipynb files for preview
 nb_execution_mode = "off"
+
+# Subroutines for date and version information
+try:
+    response = requests.get(
+        "https://pypi.org/pypi/rsome/json",
+        timeout=10
+    )
+    response.raise_for_status()
+
+    data = response.json()
+    release_version = data["info"]["version"]
+
+    release_date = datetime.fromisoformat(
+        data["releases"][release_version][0]["upload_time"]
+    ).strftime("%d %b, %Y")
+
+except Exception:
+    release_version = "Unknown"
+    release_date = "Unknown"
+
+myst_enable_extensions = [
+    "dollarmath",
+    "amsmath",
+    "substitution",
+]
+
+myst_substitutions = {
+    "rsome_version": release_version,
+    "rsome_release_date": release_date,
+    "current_date": datetime.now().strftime("%b, %Y"),
+}
