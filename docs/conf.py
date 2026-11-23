@@ -34,7 +34,7 @@ html_theme = 'pydata_sphinx_theme'
 html_sidebars = {"**": []}
 html_theme_options = {
     "secondary_sidebar_items": [],
-    
+
     "logo": {
         "text": " ",
         "image_light": "logo/logolight.png",
@@ -62,11 +62,10 @@ html_js_files = []
 html_css_files = ["custom.css"]
 
 nb_execution_mode = "auto"
-myst_enable_extensions = [
-    "colon_fence",
-    "dollarmath",
-    "amsmath",
-]
+#myst_enable_extensions = [
+#    "dollarmath",
+#    "amsmath",
+#]
 mathjax3_config = {
     "tex": {
         "tags": "ams",
@@ -110,6 +109,7 @@ myst_enable_extensions = [
     "dollarmath",
     "amsmath",
     "substitution",
+    "colon_fence",
 ]
 
 myst_substitutions = {
