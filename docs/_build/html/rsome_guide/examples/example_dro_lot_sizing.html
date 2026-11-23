@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Adaptive Distributionally Robust Lot-Sizing &#8212; RSOME  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9075c249" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=1e580bb1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>window.MathJax = {"tex": {"tags": "ams"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_guide/examples/example_dro_lot_sizing';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/custom.js?v=964f46ef"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Applications" href="../../rsome_examples.html" />
+    <link rel="prev" title="Robust Newsvendor under Wasserstein Ambiguity" href="example_dro_newsvendor_wass.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logolight.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logodark.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title"> </p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dro-lot-sizing-title">
+<span id="adaptive-distributionally-robust-lot-sizing"></span><h1>Adaptive Distributionally Robust Lot-Sizing<a class="headerlink" href="#dro-lot-sizing-title" title="Link to this heading">#</a></h1>
+<p>In this example, we will use RSOME to solve the lot-sizing problem discussed in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="#id14" title="Dimitris Bertsimas, Shimrit Shtern, and Bradley Sturt. Two-stage sample robust optimization. Operations Research, 70(1):624–640, 2022.">BSS22</a>]</span>. This problem was formulated as a two-stage robust in <a class="reference internal" href="example_aro_lot_sizing.html#aro-lot-sizing-title"><span class="std std-ref">Adaptive Robust Lot-Sizing</span></a>, and here we will adopt the same setting, where a capacitated network with <span class="math notranslate nohighlight">\(N\)</span> locations is considered, and each location <span class="math notranslate nohighlight">\(i\)</span> has a random demand <span class="math notranslate nohighlight">\(d_i\)</span>. The demand is supplied by the existing local stock <span class="math notranslate nohighlight">\(x_i\)</span> or by transporting an amount <span class="math notranslate nohighlight">\(y_{ij}\)</span> of units from another location <span class="math notranslate nohighlight">\(j\)</span>, which is determined after the demand is realized. Such a lot-sizing problem is formulate it as the following two-stage distributionally robust model to minimize the worst-case expected total cost:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\min~&amp;\sum\limits_{i=1}^Nc_ix_i + \sup\limits_{\mathbb{P}\in\mathcal{F}}\mathbb{E}_{\mathbb{P}}\left[
+Q(\pmb{x}, \tilde{\pmb{d}})\right] \\
+\text{s.t. }&amp;0\leq x_i \leq K &amp;&amp;\forall i\in[N],
+\end{aligned}\end{split}\]</div>
+<p>where the recourse problem <span class="math notranslate nohighlight">\(Q(\pmb{x}, \pmb{d})\)</span> is written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+Q(\pmb{x}, \pmb{d}) = \min~&amp;\sum\limits_{i=1}^N\sum\limits_{j=1}^Nc_{ij}y_{ij} \\
+\text{s.t. }&amp;x_i - \sum\limits_{j=1}^Ny_{ij} + \sum\limits_{j=1}^Ny_{ji} \geq d_i &amp;&amp;\forall i \in [N] \\
+&amp;\pmb{y}\in\mathbb{R}_+^{N\times N}
+\end{aligned}\end{split}\]</div>
+<p>In the following numerical studies, parameters are configured similar to <a class="reference internal" href="example_aro_lot_sizing.html#aro-lot-sizing-title"><span class="std std-ref">Adaptive Robust Lot-Sizing</span></a>: there are <span class="math notranslate nohighlight">\(N=15\)</span> locations and their coordinates are generated uniformly at random from <span class="math notranslate nohighlight">\([0, 10]^2\)</span>. The cost of each local stock is <span class="math notranslate nohighlight">\(c_i=20\)</span>, and the shifting cost <span class="math notranslate nohighlight">\(t_{ij}\)</span> is calculated as the Euclidean distance between store <span class="math notranslate nohighlight">\(i\)</span> and store <span class="math notranslate nohighlight">\(j\)</span>. The stock capacity <span class="math notranslate nohighlight">\(K_i\)</span> for at all locations are set to be <span class="math notranslate nohighlight">\(20\)</span> units, and the capacity of product shifting is <span class="math notranslate nohighlight">\(b_{ij}=K/(n-1)u_{ij}\)</span>, where <span class="math notranslate nohighlight">\(u_{ij}\)</span> are i.i.d. random variables generated from a standard uniform distribution. These parameters are defined in the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">N</span> <span class="o">=</span> <span class="mi">15</span>                                           <span class="c1"># the total number of locations</span>
+<span class="n">c</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>                              <span class="c1"># the storage cost at each location</span>
+<span class="n">K</span> <span class="o">=</span> <span class="mi">20</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>                              <span class="c1"># The maximum stock capacity</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+<span class="n">xy</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>                     <span class="c1"># randomly generated locations in a 2D space</span>
+<span class="n">t</span> <span class="o">=</span> <span class="p">((</span><span class="n">xy</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span> <span class="o">-</span> <span class="n">xy</span><span class="p">[[</span><span class="mi">0</span><span class="p">]]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span>
+     <span class="p">(</span><span class="n">xy</span><span class="p">[[</span><span class="mi">1</span><span class="p">]]</span> <span class="o">-</span> <span class="n">xy</span><span class="p">[[</span><span class="mi">1</span><span class="p">]]</span><span class="o">.</span><span class="n">T</span><span class="p">)</span> <span class="o">**</span> <span class="mi">2</span><span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span>          <span class="c1"># the shifting costs as the Euclidean distances</span>
+<span class="n">b</span> <span class="o">=</span> <span class="n">K</span><span class="o">/</span><span class="p">(</span><span class="n">N</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>               <span class="c1"># the capacity of product shifting</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The empirical distribution of the random demand <span class="math notranslate nohighlight">\(\tilde{\pmb{d}}\)</span> is represented by a sample dataset of <span class="math notranslate nohighlight">\(S=16\)</span> records generated uniformly at random from <span class="math notranslate nohighlight">\([0, d^{\max}]^N\)</span>, where <span class="math notranslate nohighlight">\(d^{\max}=20\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">dmax</span> <span class="o">=</span> <span class="mi">20</span>
+<span class="n">S</span> <span class="o">=</span> <span class="mi">16</span>
+
+<span class="n">ds</span> <span class="o">=</span> <span class="n">dmax</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">N</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="sample-average-approximation">
+<h2>Sample Average Approximation<a class="headerlink" href="#sample-average-approximation" title="Link to this heading">#</a></h2>
+<p>We firstly formulate the model in a sample average approximation (SAA) approach, where <span class="math notranslate nohighlight">\(\mathcal{F}\)</span> is a singleton set containing only the empirical distribution:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{F} = \left\{
+\mathbb{P}\in\mathcal{P}\left(\mathbb{R}^N\times[S]\right) \left|
+\begin{array}{ll}
+(\tilde{\pmb{d}}, s)\sim \mathbb{P} \\
+\mathbb{P}\left[\left.\tilde{\pmb{d}}=\hat{\pmb{d}}_s\right|\tilde{s}=s\right] = 1 &amp;\forall s\in[S] \\
+\mathbb{P}\left[\tilde{\pmb{s}} = s \right] = 1/S &amp;\forall s\in[S]
+\end{array}
+\right.
+\right\},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{\pmb{d}}_s\)</span> is the <span class="math notranslate nohighlight">\(s\)</span>th sample of the empirical distribution. Notice that in the SAA model, the wait-and-see decision <span class="math notranslate nohighlight">\(y_{ij}\)</span> adapts to each sample record, hence the adaptation rule is specified as <span class="math notranslate nohighlight">\(y_{ij}\in\mathcal{A}(\{\{1\}, \{2\}, ..., \{S\}\})\)</span>. Such a model is formulated and solved by the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span><span class="p">,</span> <span class="n">E</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="n">d</span> <span class="o">==</span> <span class="n">ds</span><span class="p">[</span><span class="n">s</span><span class="p">])</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="n">c</span><span class="nd">@x</span> <span class="o">+</span> <span class="n">E</span><span class="p">((</span><span class="n">t</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="n">forall</span><span class="o">=</span><span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">d</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">K</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="s1">&#39;copt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by COPT 8.0.5...
+Solution status: 1
+Running time: 0.0657s
+</pre></div>
+</div>
+</div>
+</div>
+<p>After the model is solved, the solution is saved as a variable named <code class="docutils literal notranslate"><span class="pre">x_saa</span></code>, and the minimum objective value is printed as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_saa</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective value: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective value: 3740.4456
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-robust-optimization-with-single-policy-approximation">
+<h2>Sample Robust Optimization with Single-Policy Approximation<a class="headerlink" href="#sample-robust-optimization-with-single-policy-approximation" title="Link to this heading">#</a></h2>
+<p>Now we formulate the lot-sizing problem as a two-stage sample robust optimization model introduced in <span class="bibtex-citation" id="id2">[<a class="reference internal" href="#id14" title="Dimitris Bertsimas, Shimrit Shtern, and Bradley Sturt. Two-stage sample robust optimization. Operations Research, 70(1):624–640, 2022.">BSS22</a>]</span>, where the ambiguity set is written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{F} = \left\{
+\mathbb{P}\in\mathcal{P}\left(\mathbb{R}^N\times[S]\right) \left|
+\begin{array}{ll}
+(\tilde{\pmb{d}}, s)\sim \mathbb{P} \\
+\mathbb{P}\left[\left.\left\|\tilde{\pmb{d}}-\hat{\pmb{d}}_s\right\| \leq \epsilon \right|\tilde{s}=s\right] = 1 &amp;\forall s\in[S] \\
+\mathbb{P}\left[\tilde{\pmb{s}} = s \right] = 1/S &amp;\forall s\in[S]
+\end{array}
+\right.
+\right\},\end{split}\]</div>
+<p>where the scenario-wise support is a Euclidean norm with a radius of <span class="math notranslate nohighlight">\(\epsilon\)</span> around the empirical data <span class="math notranslate nohighlight">\(\hat{\pmb{d}}_s\)</span>. We first use a single-policy affine adaptation (SP affine) <span class="math notranslate nohighlight">\(y_{ij}\in\overline{\mathcal{A}}(\{\{1, 2, ..., S\}\}, [N])\)</span> to approximate the wait-and-see decision, which implies that <span class="math notranslate nohighlight">\(y_{ij}\)</span> follows an affine function of the random variable <span class="math notranslate nohighlight">\(\pmb{d}\)</span> across all samples. Suppose that the ambiguity set parameter <span class="math notranslate nohighlight">\(\epsilon=10S^{-1/10}\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epsilon</span> <span class="o">=</span> <span class="mi">10</span><span class="o">*</span><span class="n">S</span><span class="o">**</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="o">/</span><span class="mi">10</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The sample robust optimization model is then solved by the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span><span class="p">,</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">ds</span><span class="p">[</span><span class="n">s</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="n">c</span><span class="nd">@x</span> <span class="o">+</span> <span class="n">E</span><span class="p">((</span><span class="n">t</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="n">forall</span><span class="o">=</span><span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">d</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">y</span><span class="p">,</span> <span class="n">y</span> <span class="o">&lt;=</span> <span class="n">b</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">K</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="s1">&#39;copt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by COPT 8.0.5...
+Solution status: 1
+Running time: 2.6954s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The solution is saved as a variable named <code class="docutils literal notranslate"><span class="pre">x_srsp</span></code>, and the minimum objective value is printed as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_srsp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective value: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective value: 4464.2234
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="sample-robust-optimization-with-multiple-policy-approximation">
+<h2>Sample Robust Optimization with Multiple-Policy Approximation<a class="headerlink" href="#sample-robust-optimization-with-multiple-policy-approximation" title="Link to this heading">#</a></h2>
+<p>The SP affine approximation above can be extended to a multiple-policy affine adaptation (MP affine) version, where the wait-and-see decision <span class="math notranslate nohighlight">\(y_ij\)</span> follows affine functions of the random demand <span class="math notranslate nohighlight">\(\pmb{d}\)</span>, and coefficients of these functions may vary under different sample realizations. In other words, <span class="math notranslate nohighlight">\(y_{ij} \in \overline{\mathcal{A}}(\{\{1\}, \{2\}, ..., \{S\}\}, [N])\)</span>. The code is slightly changed as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span><span class="p">,</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>             <span class="c1"># define a model</span>
+
+<span class="n">d</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>
+
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">d</span> <span class="o">-</span> <span class="n">ds</span><span class="p">[</span><span class="n">s</span><span class="p">])</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">N</span><span class="p">)</span>               <span class="c1"># here-and-now location decisions</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">((</span><span class="n">N</span><span class="p">,</span> <span class="n">N</span><span class="p">))</span>          <span class="c1"># wait-and-see transportation decisions</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="o">*</span><span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">))</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">d</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="n">c</span><span class="nd">@x</span> <span class="o">+</span> <span class="n">E</span><span class="p">((</span><span class="n">t</span><span class="o">*</span><span class="n">y</span><span class="p">)</span><span class="o">.</span><span class="n">sum</span><span class="p">()),</span> <span class="n">forall</span><span class="o">=</span><span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span> <span class="o">-</span> <span class="n">y</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="n">d</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">x</span><span class="p">,</span> <span class="n">x</span> <span class="o">&lt;=</span> <span class="n">K</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="s1">&#39;copt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by COPT 8.0.5...
+Solution status: 1
+Running time: 0.7383s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x_srmp</span> <span class="o">=</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective value: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective value: 4343.6864
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="visualization-of-the-optimal-decisions">
+<h2>Visualization of the Optimal Decisions<a class="headerlink" href="#visualization-of-the-optimal-decisions" title="Link to this heading">#</a></h2>
+<p>The optimal decisions yielded from the three models above are visualized in the following figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">fig</span><span class="p">,</span> <span class="n">axes</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">subplots</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">11.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">))</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">({</span><span class="s1">&#39;SAA&#39;</span><span class="p">:</span> <span class="n">x_saa</span><span class="p">,</span>
+                        <span class="s1">&#39;SRO SP affine&#39;</span><span class="p">:</span> <span class="n">x_srsp</span><span class="p">,</span>
+                        <span class="s1">&#39;SRO MP affine&#39;</span><span class="p">:</span> <span class="n">x_srmp</span><span class="p">})</span>
+
+<span class="n">results</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">kind</span><span class="o">=</span><span class="s1">&#39;bar&#39;</span><span class="p">,</span> <span class="n">width</span><span class="o">=</span><span class="mf">0.7</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="n">axes</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">rotation</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Location&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Stock Scale&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.01</span><span class="p">,</span> <span class="mf">1.03</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/890ddd71f1b4a1b848cde71ff45b7e17c08fad2626b0fb490d06ceea2ba4343d.png" src="../../_images/890ddd71f1b4a1b848cde71ff45b7e17c08fad2626b0fb490d06ceea2ba4343d.png" />
+</div>
+</div>
+<br>
+<hr class="docutils" />
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id3">
+<div role="list" class="citation-list">
+<div class="citation" id="id14" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>BSS22<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p>Dimitris Bertsimas, Shimrit Shtern, and Bradley Sturt. Two-stage sample robust optimization. <em>Operations Research</em>, 70(1):624–640, 2022.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_dro_newsvendor_wass.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Robust Newsvendor under Wasserstein Ambiguity</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../../rsome_examples.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Applications</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Melvyn Sim, Zhi Chen, Peng Xiong.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Robust Mean-Variance Portfolio &#8212; RSOME  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9075c249" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=1e580bb1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>window.MathJax = {"tex": {"tags": "ams"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_guide/examples/example_ro_mean_var_portfolio';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/custom.js?v=964f46ef"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Robust Portfolio with Budgeted Uncertainty" href="example_ro_portfolio.html" />
+    <link rel="prev" title="RSOME for Robust Optimization" href="../rsome_ro.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logolight.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logodark.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title"> </p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="example-ro-mean-var-portfolio-title">
+<span id="robust-mean-variance-portfolio"></span><h1>Robust Mean-Variance Portfolio<a class="headerlink" href="#example-ro-mean-var-portfolio-title" title="Link to this heading">#</a></h1>
+<p>This case study will replicate the results of a robust mean-variance portfolio model presented in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="#id16" title="MOSEK ApS. MOSEK Portfolio Optimization Cookbook. 2023.">ApS23</a>]</span> in a more concise and straightforward way. The model is written as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\max~&amp;\min\limits_{\pmb{\mu}\in\mathcal{U}}~\pmb{\mu}^{\top}\pmb{x} - \frac{\delta}{2}\pmb{x}^{\top}\pmb{\Sigma}\pmb{x} \\
+\text{s.t.}~&amp;\sum\limits_{i=1}^n\pmb{x} = 1 \\
+&amp;\pmb{x}\in\mathbb{R}_+^n,
+\end{aligned}\end{split}\]</div>
+<p>where the mean returns <span class="math notranslate nohighlight">\(\pmb{\mu}\)</span> belongs to the ellipsoidal uncertainty set</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{U} = \left\{
+\pmb{\mu}: \left(\pmb{\mu} - \pmb{\mu}_0\right)^{\top}Q^{-1}\left(\pmb{\mu} - \pmb{\mu}_0\right) \leq \gamma^2
+\right\},\]</div>
+<p>with <span class="math notranslate nohighlight">\(Q\)</span> being a known positive semidefinite matrix.</p>
+<p>The nominal mean returns <span class="math notranslate nohighlight">\(\pmb{\mu}\)</span> and the covariance matrix <span class="math notranslate nohighlight">\(\pmb{\Sigma}\)</span> are estimated based on the <a class="reference download internal" download="" href="../../_downloads/da7cfd868e174213561e3338d51e1cc8/stocks.csv"><span class="xref download myst">stocks.csv</span></a> dataset, which provides the weekly prices of eight stocks from March 21, 2016 to March 18, 2021.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">precision</span> <span class="o">=</span> <span class="mi">4</span>
+
+<span class="n">data</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="s1">&#39;stocks.csv&#39;</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s1">&#39;Date&#39;</span><span class="p">)</span>
+<span class="n">data</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_html"><div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>PM</th>
+      <th>LMT</th>
+      <th>MCD</th>
+      <th>MMM</th>
+      <th>AAPL</th>
+      <th>MSFT</th>
+      <th>TXN</th>
+      <th>CSCO</th>
+    </tr>
+    <tr>
+      <th>Date</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>2016-03-14</th>
+      <td>64.9492</td>
+      <td>180.0196</td>
+      <td>102.7192</td>
+      <td>126.2342</td>
+      <td>24.2380</td>
+      <td>47.8760</td>
+      <td>46.3563</td>
+      <td>22.2157</td>
+    </tr>
+    <tr>
+      <th>2016-03-21</th>
+      <td>64.5522</td>
+      <td>177.6482</td>
+      <td>102.0652</td>
+      <td>125.5699</td>
+      <td>24.1808</td>
+      <td>48.5205</td>
+      <td>46.0396</td>
+      <td>21.9256</td>
+    </tr>
+    <tr>
+      <th>2016-03-28</th>
+      <td>66.6844</td>
+      <td>181.8123</td>
+      <td>105.1530</td>
+      <td>127.9139</td>
+      <td>25.1694</td>
+      <td>49.7377</td>
+      <td>47.0465</td>
+      <td>22.4981</td>
+    </tr>
+    <tr>
+      <th>2016-04-04</th>
+      <td>67.4398</td>
+      <td>184.4118</td>
+      <td>105.9312</td>
+      <td>127.2268</td>
+      <td>24.8650</td>
+      <td>48.7084</td>
+      <td>47.0059</td>
+      <td>21.7139</td>
+    </tr>
+    <tr>
+      <th>2016-04-11</th>
+      <td>66.9251</td>
+      <td>184.0125</td>
+      <td>105.7822</td>
+      <td>128.8683</td>
+      <td>25.1373</td>
+      <td>49.8093</td>
+      <td>47.8503</td>
+      <td>22.0786</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>2021-02-15</th>
+      <td>72.9401</td>
+      <td>308.8611</td>
+      <td>198.4512</td>
+      <td>156.0663</td>
+      <td>127.8069</td>
+      <td>234.6678</td>
+      <td>165.2999</td>
+      <td>42.0870</td>
+    </tr>
+    <tr>
+      <th>2021-02-22</th>
+      <td>71.7195</td>
+      <td>304.1006</td>
+      <td>192.7475</td>
+      <td>154.7580</td>
+      <td>119.3337</td>
+      <td>226.8236</td>
+      <td>159.6648</td>
+      <td>41.3407</td>
+    </tr>
+    <tr>
+      <th>2021-03-01</th>
+      <td>73.5462</td>
+      <td>315.8780</td>
+      <td>195.0906</td>
+      <td>159.8323</td>
+      <td>119.4911</td>
+      <td>226.0623</td>
+      <td>155.6516</td>
+      <td>42.6121</td>
+    </tr>
+    <tr>
+      <th>2021-03-08</th>
+      <td>74.8778</td>
+      <td>315.6553</td>
+      <td>199.7663</td>
+      <td>163.4745</td>
+      <td>119.1073</td>
+      <td>230.1131</td>
+      <td>160.8697</td>
+      <td>44.9800</td>
+    </tr>
+    <tr>
+      <th>2021-03-15</th>
+      <td>77.3020</td>
+      <td>332.5984</td>
+      <td>209.7010</td>
+      <td>168.8494</td>
+      <td>118.6152</td>
+      <td>225.2033</td>
+      <td>161.6019</td>
+      <td>44.9615</td>
+    </tr>
+  </tbody>
+</table>
+<p>262 rows × 8 columns</p>
+</div></div></div>
+</div>
+<p>Following the data preparation steps introduced in the <a class="reference external" href="https://docs.mosek.com/portfolio-cookbook/inputdata.html">Mosek Portfolio Optimization Cookbook</a>, the estimated mean return and covariance matrix can be returned by the <code class="docutils literal notranslate"><span class="pre">estimate_return()</span></code> function, imported from the file <a class="reference download internal" download="" href="../../_downloads/11b4a030c0f50908c22055202875c66c/preprocessing.py"><span class="xref download myst">preprocessing.py</span></a>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">preprocessing</span><span class="w"> </span><span class="kn">import</span> <span class="n">estimate_return</span>
+
+<span class="n">mean</span><span class="p">,</span> <span class="n">cov</span> <span class="o">=</span> <span class="n">estimate_return</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+<span class="n">mu0</span> <span class="o">=</span> <span class="n">mean</span><span class="o">.</span><span class="n">values</span>
+<span class="n">Sigma</span> <span class="o">=</span> <span class="n">cov</span><span class="o">.</span><span class="n">values</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We then define the <code class="docutils literal notranslate"><span class="pre">rmv_portfolio()</span></code> function for formulating and solving the robust mean-variance portfolio model. When calling the function, users may specify the estimated mean return <code class="docutils literal notranslate"><span class="pre">mu0</span></code> and estimated covariance matrix <code class="docutils literal notranslate"><span class="pre">Sigma</span></code>, the risk-aversion coefficient <code class="docutils literal notranslate"><span class="pre">delta</span></code>, and the uncertainty parameter <code class="docutils literal notranslate"><span class="pre">gamma</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">cpt_solver</span> <span class="k">as</span> <span class="n">cpt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">rmv_portfolio</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+
+    <span class="n">G</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">cholesky</span><span class="p">(</span><span class="n">Sigma</span><span class="p">)</span>
+    <span class="n">Q</span> <span class="o">=</span> <span class="n">G</span><span class="nd">@G</span><span class="o">.</span><span class="n">T</span>
+    <span class="n">n</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">mu0</span><span class="p">)</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">r</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+
+    <span class="n">mu</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+    <span class="n">uset</span> <span class="o">=</span> <span class="n">rso</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">mu</span> <span class="o">-</span> <span class="n">mu0</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">Sigma</span><span class="p">))</span> <span class="o">&lt;=</span> <span class="n">gamma</span><span class="o">**</span><span class="mi">2</span>
+
+
+    <span class="k">if</span> <span class="n">gamma</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">mu0</span><span class="nd">@x</span> <span class="o">-</span> <span class="p">(</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">maxmin</span><span class="p">(</span><span class="n">mu</span><span class="nd">@x</span> <span class="o">-</span> <span class="p">(</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="p">,</span> <span class="n">uset</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">r</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cpt</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="n">display</span><span class="p">)</span>
+
+    <span class="n">risk</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="o">**</span><span class="mf">0.5</span>
+
+    <span class="k">return</span> <span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span> <span class="o">+</span> <span class="p">(</span><span class="n">delta</span><span class="o">/</span><span class="mi">2</span><span class="p">)</span><span class="o">*</span><span class="n">r</span><span class="o">.</span><span class="n">get</span><span class="p">(),</span> <span class="n">risk</span><span class="p">,</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Next, the function is executed repeatedly in the following <code class="docutils literal notranslate"><span class="pre">for</span></code>-loop to find out the worst-case returns, the portfolio risks in terms of the standard deviations, and the optimal solutions, under different risk-aversion preference.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">deltas</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">logspace</span><span class="p">(</span><span class="n">start</span><span class="o">=-</span><span class="mi">1</span><span class="p">,</span> <span class="n">stop</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="mi">20</span><span class="p">)[::</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">results</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">()</span>
+<span class="n">ro_sols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="n">nom_sols</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">delta</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">deltas</span><span class="p">):</span>
+    <span class="n">wc_return</span><span class="p">,</span> <span class="n">risk</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">rmv_portfolio</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">,</span> <span class="n">delta</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">0.02</span><span class="p">)</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;RO Return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wc_return</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;RO Risk&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">risk</span>
+    <span class="n">ro_sols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+    <span class="n">wc_return</span><span class="p">,</span> <span class="n">risk</span><span class="p">,</span> <span class="n">xs</span> <span class="o">=</span> <span class="n">rmv_portfolio</span><span class="p">(</span><span class="n">mu0</span><span class="p">,</span> <span class="n">Sigma</span><span class="p">,</span> <span class="n">delta</span><span class="p">)</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Nominal Return&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">wc_return</span>
+    <span class="n">results</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span><span class="n">i</span><span class="p">,</span> <span class="s1">&#39;Nominal Risk&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">risk</span>
+    <span class="n">nom_sols</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">xs</span><span class="p">)</span>
+
+<span class="n">ro_sols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">ro_sols</span><span class="p">)</span>
+<span class="n">nom_sols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">nom_sols</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The trade-off between the worst-case mean return and the risk is illustrated by the following figure.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;RO Risk&#39;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;RO Return&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Robust Model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;Nominal Risk&#39;</span><span class="p">],</span> <span class="n">results</span><span class="p">[</span><span class="s1">&#39;Nominal Return&#39;</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;Nominmal Model&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio Risk (Std. Dev.)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Portfolio Return&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/bcf41ba76b41d01f0b8d1a999b0b75f6e18c9f3075e75bc68ad9c6504dc6a1e0.png" src="../../_images/bcf41ba76b41d01f0b8d1a999b0b75f6e18c9f3075e75bc68ad9c6504dc6a1e0.png" />
+</div>
+</div>
+<p>Finally, we plot the portfolio allocation <span class="math notranslate nohighlight">\(\pmb{x}\)</span> against different portfolio risks as a result of varying the risk-aversion coefficient <span class="math notranslate nohighlight">\(\delta\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">n</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">results</span><span class="p">[</span><span class="s1">&#39;RO Risk&#39;</span><span class="p">],</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">bottom</span><span class="o">+</span><span class="n">ro_sols</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span> 
+                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> 
+                     <span class="n">label</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">bottom</span> <span class="o">+=</span> <span class="n">ro_sols</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+    
+<span class="n">plt</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">bbox_to_anchor</span><span class="o">=</span><span class="p">(</span><span class="mf">1.26</span><span class="p">,</span> <span class="mf">1.02</span><span class="p">),</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Portfolio Risk (Std. Dev.)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Fraction of Investment&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/49ec889c2c4a646cab691ead438d008eb2a6dca4e9fb146b3ab522279e8e99aa.png" src="../../_images/49ec889c2c4a646cab691ead438d008eb2a6dca4e9fb146b3ab522279e8e99aa.png" />
+</div>
+</div>
+<p>Interested readers may refer to the <a class="reference external" href="https://docs.mosek.com/portfolio-cookbook/factormodels.html#factor-models-example-1">Mosek Portfolio Optimization Cookbook</a> for the similar results.</p>
+<br>
+<br>
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id2">
+<div role="list" class="citation-list">
+<div class="citation" id="id16" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">ApS23</a><span class="fn-bracket">]</span></span>
+<p>MOSEK ApS. <em>MOSEK Portfolio Optimization Cookbook</em>. 2023.</p>
+</div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="../rsome_ro.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">RSOME for Robust Optimization</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_ro_portfolio.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Robust Portfolio with Budgeted Uncertainty</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Melvyn Sim, Zhi Chen, Peng Xiong.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

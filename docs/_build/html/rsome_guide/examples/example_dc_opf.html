@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Optimal DC Power Flow &#8212; RSOME  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9075c249" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=1e580bb1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>window.MathJax = {"tex": {"tags": "ams"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_guide/examples/example_dc_opf';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/custom.js?v=964f46ef"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Conic Relaxation of Optimal AC Power Flows" href="example_ac_opf.html" />
+    <link rel="prev" title="Integer Programming for Sudoku" href="example_sudoku.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logolight.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logodark.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title"> </p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dc-opf-title">
+<span id="optimal-dc-power-flow"></span><h1>Optimal DC Power Flow<a class="headerlink" href="#dc-opf-title" title="Link to this heading">#</a></h1>
+<p>The optimal power flow problem minimizes the overall operating cost in a electricity network while subject to a number of generation and transmission constraints. The DC approximation assumes fixed voltage magnitudes and small angle differences; it is a commonly used linear network approximation, written as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\min~&amp;\sum\limits_{i=1}^m (a_ig_i^2 + b_ig_i + c_i) \\
+\text{s.t.}~&amp;\pmb{B}_{\text{bus}} \pmb{v} + \pmb{I}_{\text{bg}} \pmb{g} = \pmb{L} \\
+&amp;|\pmb{B}_{\text{f}} \pmb{v}| \leq \pmb{R} \\
+&amp;P_i^{\min} \leq g_i \leq P_i^{\max} &amp;\forall i = 1, 2, ..., m \\
+&amp;v_{ref} = 0,
+\end{aligned}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(n\)</span> is the number of buses, and <span class="math notranslate nohighlight">\(m\)</span> is the number of generators. The decision variables:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(v_j\)</span>: the voltage angle of bus <span class="math notranslate nohighlight">\(j\)</span>, with <span class="math notranslate nohighlight">\(j=1, 2, ..., n\)</span>;</p></li>
+<li><p><span class="math notranslate nohighlight">\(g_i\)</span>: the output of the <span class="math notranslate nohighlight">\(i\)</span>th generator, with <span class="math notranslate nohighlight">\(i=1, 2, ..., m\)</span>,</p></li>
+</ul>
+<p>and parameters:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(\pmb{B}_{\text{bus}}\)</span>: the matrix of reciprocals of reactance between buses;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\pmb{I}_{\text{bg}}\)</span>: the matrix that places generations to their corresponding buses;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\pmb{L}\)</span>: the array of electricity load at each bus;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\pmb{B}_{\text{f}}\)</span>: the matrix for calculating the transmitted power;</p></li>
+<li><p><span class="math notranslate nohighlight">\(P_i^{\min}\)</span> and <span class="math notranslate nohighlight">\(P_i^{\max}\)</span>: the minimum and maximum output of the <span class="math notranslate nohighlight">\(i\)</span>th generator;</p></li>
+<li><p><span class="math notranslate nohighlight">\(\pmb{R}\)</span>: the array of transmission line capacity ratings.</p></li>
+</ul>
+<p>In this case study, we consider the <span class="bibtex-citation" id="id1">[<a class="reference internal" href="#id6" title="Cliff Grigg, Peter Wong, Paul Albrecht, Ron Allan, Murty Bhavaraju, Roy Billinton, Quan Chen, Clement Fong, Suheil Haddad, Sastry Kuruganty, and others. The ieee reliability test system-1996. a report prepared by the reliability test system task force of the application of probability methods subcommittee. IEEE Transactions on power systems, 14(3):1010–1020, 1999.">GWA+99</a>]</span>, and the dataset is generated according to the one used in <a class="reference external" href="https://matpower.org/">MATPOWER</a>. You may find the dataset as an Excel file <a class="reference download internal" download="" href="../../_downloads/9779ee6a3d60ee40da6e3cd87cbe5da7/ieee_rts.xlsx"><span class="xref download myst">ieee_rts.xlsx</span></a>. The following code is used to import system parameters from the file.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Load data from the Excel file</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">pd</span>
+
+<span class="n">Bbus_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;ieee_rts.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Bbus&#39;</span><span class="p">)</span>
+<span class="n">Bf_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;ieee_rts.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Bf&#39;</span><span class="p">)</span>
+<span class="n">Gen_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;ieee_rts.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Gen&#39;</span><span class="p">)</span>
+<span class="n">Rates_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;ieee_rts.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Rates&#39;</span><span class="p">)</span>
+<span class="n">Load_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span><span class="s1">&#39;ieee_rts.xlsx&#39;</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="s1">&#39;Load&#39;</span><span class="p">)</span>
+
+<span class="n">Bbus</span> <span class="o">=</span> <span class="n">Bbus_df</span><span class="o">.</span><span class="n">values</span>                            <span class="c1"># Bbus array</span>
+<span class="n">Bf</span> <span class="o">=</span> <span class="n">Bf_df</span><span class="o">.</span><span class="n">values</span>                                <span class="c1"># Bf array</span>
+
+<span class="n">R</span> <span class="o">=</span> <span class="n">Rates_df</span><span class="p">[</span><span class="s1">&#39;Rate_A&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>                    <span class="c1"># line capacity ratings</span>
+<span class="n">GBus</span> <span class="o">=</span> <span class="n">Gen_df</span><span class="p">[</span><span class="s1">&#39;GBus&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>                     <span class="c1"># generator buses</span>
+<span class="n">Pmin</span> <span class="o">=</span> <span class="n">Gen_df</span><span class="p">[</span><span class="s1">&#39;Pmin&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>                     <span class="c1"># minimum outputs of generators</span>
+<span class="n">Pmax</span> <span class="o">=</span> <span class="n">Gen_df</span><span class="p">[</span><span class="s1">&#39;Pmax&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>                     <span class="c1"># maximum outputs of generators</span>
+<span class="n">C</span> <span class="o">=</span> <span class="n">Gen_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[:,</span> <span class="s1">&#39;Cost_a&#39;</span><span class="p">:</span><span class="s1">&#39;Cost_c&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>      <span class="c1"># cost coefficients of generators</span>
+<span class="n">L</span> <span class="o">=</span> <span class="n">Load_df</span><span class="p">[</span><span class="s1">&#39;Load&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>                       <span class="c1"># electricity loads</span>
+
+<span class="n">n</span> <span class="o">=</span> <span class="n">Bf</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>                                  <span class="c1"># n: Number of buses</span>
+<span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">GBus</span><span class="p">)</span>                                    <span class="c1"># m: Number of generators</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>The DC optimal power flow problem can be solved by the following Python code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">v</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>                     <span class="c1"># decision as voltage angles</span>
+<span class="n">g</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>                     <span class="c1"># decision as the generation output</span>
+
+<span class="n">obj</span> <span class="o">=</span> <span class="p">(</span>
+    <span class="p">(</span><span class="n">C</span><span class="p">[:,</span> <span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mf">0.5</span> <span class="o">*</span> <span class="n">g</span><span class="p">)</span><span class="o">.</span><span class="n">sumsqr</span><span class="p">()</span> <span class="o">+</span>     <span class="c1"># squared term of the objective function</span>
+    <span class="n">C</span><span class="p">[:,</span> <span class="mi">1</span><span class="p">]</span><span class="nd">@g</span> <span class="o">+</span>                       <span class="c1"># linear term of the objective function</span>
+    <span class="n">C</span><span class="p">[:,</span> <span class="mi">2</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>                     <span class="c1"># constant term of the objective function</span>
+<span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>                        <span class="c1"># minimize the objective</span>
+
+<span class="n">I_bg</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+<span class="n">I_bg</span><span class="p">[</span><span class="n">GBus</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">)]</span> <span class="o">=</span> <span class="mi">1</span>            <span class="c1"># array of generator buses</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">Bbus</span><span class="nd">@v</span> <span class="o">+</span> <span class="n">I_bg</span><span class="nd">@g</span> <span class="o">==</span> <span class="n">L</span><span class="p">)</span>        <span class="c1"># power balance equation</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="n">Bf</span><span class="nd">@v</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">R</span><span class="p">)</span>              <span class="c1"># transmission line capacities</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">g</span> <span class="o">&gt;=</span> <span class="n">Pmin</span><span class="p">,</span> <span class="n">g</span> <span class="o">&lt;=</span> <span class="n">Pmax</span><span class="p">)</span>        <span class="c1"># output capacities of generators</span>
+<span class="n">Ref</span> <span class="o">=</span> <span class="mi">12</span>                              <span class="c1"># index of the reference bus</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">v</span><span class="p">[</span><span class="n">Ref</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span>                 <span class="c1"># set the reference bus</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>                         <span class="c1"># solve the model</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by ECOS 2.0.14...
+Solution status: Optimal solution found
+Running time: 0.0055s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The optimal generation decision and the objective value are shown below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+
+<span class="n">gs</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+<span class="n">index</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">12</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">))</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">bar</span><span class="p">(</span><span class="n">index</span><span class="p">,</span> <span class="n">gs</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;b&#39;</span><span class="p">,</span> <span class="n">alpha</span><span class="o">=</span><span class="mf">0.7</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;Indexes of Generators&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Generation Outputs (MW)&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xticks</span><span class="p">(</span><span class="n">index</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlim</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Optimal generation cost: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">0.2f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/204f190963cc500545492d297d61cb2bf098b48dc767859147c035b153bb87ac.png" src="../../_images/204f190963cc500545492d297d61cb2bf098b48dc767859147c035b153bb87ac.png" />
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Optimal generation cost: 61001.24
+</pre></div>
+</div>
+</div>
+</div>
+<br>
+<hr class="docutils" />
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id2">
+<div role="list" class="citation-list">
+<div class="citation" id="id6" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id1">GWA+99</a><span class="fn-bracket">]</span></span>
+<p>Cliff Grigg, Peter Wong, Paul Albrecht, Ron Allan, Murty Bhavaraju, Roy Billinton, Quan Chen, Clement Fong, Suheil Haddad, Sastry Kuruganty, and others. The ieee reliability test system-1996. a report prepared by the reliability test system task force of the application of probability methods subcommittee. <em>IEEE Transactions on power systems</em>, 14(3):1010–1020, 1999.</p>
+</div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_sudoku.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Integer Programming for Sudoku</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_ac_opf.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Conic Relaxation of Optimal AC Power Flows</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Melvyn Sim, Zhi Chen, Peng Xiong.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

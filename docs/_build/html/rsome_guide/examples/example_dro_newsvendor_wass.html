@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Robust Newsvendor under Wasserstein Ambiguity &#8212; RSOME  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9075c249" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=1e580bb1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>window.MathJax = {"tex": {"tags": "ams"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_guide/examples/example_dro_newsvendor_wass';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/custom.js?v=964f46ef"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Adaptive Distributionally Robust Lot-Sizing" href="example_dro_lot_sizing.html" />
+    <link rel="prev" title="Medical Appointment Scheduling under Cross Moment Ambiguity" href="example_dro_medical_app.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logolight.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logodark.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title"> </p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dro-newsvendor-wass-title">
+<span id="robust-newsvendor-under-wasserstein-ambiguity"></span><h1>Robust Newsvendor under Wasserstein Ambiguity<a class="headerlink" href="#dro-newsvendor-wass-title" title="Link to this heading">#</a></h1>
+<p>In this example, we use RSOME to solve the multi-item newsvendor problem discussed in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="#id5" title="Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. Management Science, 66(8):3329–3339, 2020.">CSX20</a>]</span>. This newsvendor problem determines the order quantity <span class="math notranslate nohighlight">\(w_i\)</span> of each product <span class="math notranslate nohighlight">\(i\)</span> under an overall budget of <span class="math notranslate nohighlight">\(d\)</span>. There are totally <span class="math notranslate nohighlight">\(I\)</span> products, and each product has a selling price <span class="math notranslate nohighlight">\(p_i\)</span> and an ordering cost <span class="math notranslate nohighlight">\(c_i\)</span>. The uncertain demands of these products are represented by the random variable <span class="math notranslate nohighlight">\(\tilde{\pmb{z}}\in\mathbb{R}^I\)</span>. Once the demand quantities are realized, the selling quantity <span class="math notranslate nohighlight">\(y_i\)</span> of each product is expressed as <span class="math notranslate nohighlight">\(\min\left\{x_i, z_i\right\}\)</span>, and the newsvendor problem can be formulated as the following distributionally robust optimization model:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\min~&amp;-\pmb{p}^{\top}\pmb{x} + \sup\limits_{\mathbb{P}\in\mathcal{F}_W(\theta)} \mathbb{E}_{\mathbb{P}}\left[
+\sum\limits_{i\in[I]}p_i\max\{x_i - \tilde{z}_i, 0\}
+\right] \\
+\text{s.t. }&amp;\pmb{c}^{\top}\pmb{x} = d \\
+&amp;\pmb{x}\in\mathbb{R}_+^I,
+\end{aligned}\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\mathcal{F}_W(\theta)\)</span> is an ambiguity set that captures all distributions of <span class="math notranslate nohighlight">\(\tilde{\pmb{z}}\)</span> within a Wasserstein ball of radius <span class="math notranslate nohighlight">\(\theta \geq 0\)</span> centered at the empirical distribution. Such an ambiguity set is expressed as the following even-wise format:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{F}_W(\theta) = \left\{
+\mathbb{P}\in\mathcal{P}_0\left(\mathbb{R}^I\times\mathbb{R}\times [S]\right) 
+\left|
+\begin{array}{ll}
+(\tilde{\pmb{z}}, \tilde{u}, \tilde{s}) \in \mathbb{P} \\
+\mathbb{E}_{\mathbb{P}}[\tilde{u}|\tilde{s}\in[S]] \leq \theta \\
+\mathbb{P}\left[\left.(\tilde{\pmb{z}}, \tilde{u})\in\mathcal{Z}_s \right| \tilde{s}=s\right] = 1 &amp;\forall s \in [S] \\
+\mathbb{P}[\tilde{s}=s] = \frac{1}{S}
+\end{array}
+\right.
+\right\},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(S\)</span> is the sample size of the dataset representing the empirical distribution, and the support <span class="math notranslate nohighlight">\(\mathcal{Z}\)</span> is defined for each sample record <span class="math notranslate nohighlight">\(s\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{Z}_s = \left\{
+(\pmb{z}, u): \pmb{0} \leq \pmb{z}\leq \bar{\pmb{z}}, ~\|\pmb{z} - \hat{\pmb{z}}_s\|_1 \leq u
+\right\}.\]</div>
+<p>Notice that besides the random variable <span class="math notranslate nohighlight">\(\tilde{\pmb{z}}\)</span>, an auxiliary variable <span class="math notranslate nohighlight">\(\tilde{u}\)</span> is introduced to express the epigraph of one-norm distance <span class="math notranslate nohighlight">\(\|\pmb{z} - \hat{\pmb{z}}_s\|_1\)</span>.</p>
+<p>In the subsequent numerical experiments, parameters of the model and ambiguity set are specified as follows:</p>
+<ul class="simple">
+<li><p>The number of products is <span class="math notranslate nohighlight">\(I=6\)</span>;</p></li>
+<li><p>The unit cost of each product is <span class="math notranslate nohighlight">\(c_i = 1\)</span>;</p></li>
+<li><p>The unit price of each product <span class="math notranslate nohighlight">\(p_i\)</span> is randomly generated from a uniform distribution within <span class="math notranslate nohighlight">\([1, 5]\)</span>.</p></li>
+<li><p>The budget of product ordering is <span class="math notranslate nohighlight">\(d=50I\)</span>.</p></li>
+<li><p>The upper bound of each product demand <span class="math notranslate nohighlight">\(\bar{z}_i\)</span> is randomly generated from the uniform distribution on <span class="math notranslate nohighlight">\([0, 100]\)</span>;</p></li>
+<li><p>The empirical data has a sample size of <span class="math notranslate nohighlight">\(S=50\)</span>;</p></li>
+<li><p>The empirical distribution of demands is represented by the array <span class="math notranslate nohighlight">\(\hat{\pmb{z}}\in\mathbb{R}^{S\times I}\)</span> randomly generated from the uniform distribution on <span class="math notranslate nohighlight">\([\pmb{0}, \bar{\pmb{z}}]\)</span>;</p></li>
+<li><p>The Wasserstein metric parameter <span class="math notranslate nohighlight">\(\theta=0.01 \min \{\bar{\pmb{z}}\}\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">I</span> <span class="o">=</span> <span class="mi">6</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">ones</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">p</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">+</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">d</span> <span class="o">=</span> <span class="mi">50</span> <span class="o">*</span> <span class="n">I</span>
+<span class="n">zbar</span> <span class="o">=</span> <span class="mi">100</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+
+<span class="n">S</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">zhat</span> <span class="o">=</span> <span class="n">zbar</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">rand</span><span class="p">(</span><span class="n">S</span><span class="p">,</span> <span class="n">I</span><span class="p">)</span>
+<span class="n">theta</span> <span class="o">=</span> <span class="mf">0.01</span> <span class="o">*</span> <span class="n">zbar</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the objective function of the robust model, <span class="math notranslate nohighlight">\(\sum_{i\in[I]}p_i\max\{x_i - \tilde{z}_i, 0\}=\max_{\mathcal{J}\subseteq [I]}\sum_{j\in\mathcal{J}}p_i(x_i - \tilde{z}_i)\)</span> is convex and piecewise affine involving <span class="math notranslate nohighlight">\(2^I\)</span> pieces. Such a piecewise expression can be defined using the <code class="docutils literal notranslate"><span class="pre">maxof()</span></code> function imported from the RSOME package, as demonstrated by the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">itertools</span><span class="w"> </span><span class="kn">import</span> <span class="n">product</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">()</span>
+
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">z</span><span class="p">,</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="n">zbar</span><span class="p">,</span>
+                    <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">zhat</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">u</span><span class="p">)</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">exptset</span><span class="p">(</span><span class="n">E</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">theta</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+
+<span class="n">pieces</span> <span class="o">=</span> <span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">b</span><span class="p">)</span><span class="o">@</span><span class="p">(</span><span class="n">p</span><span class="o">*</span><span class="p">(</span><span class="n">x</span> <span class="o">-</span> <span class="n">z</span><span class="p">))</span>
+          <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">product</span><span class="p">([</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="n">repeat</span><span class="o">=</span><span class="n">I</span><span class="p">)]</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="nd">@x</span> <span class="o">+</span> <span class="n">E</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">maxof</span><span class="p">(</span><span class="o">*</span><span class="n">pieces</span><span class="p">)),</span> <span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">c</span><span class="nd">@x</span> <span class="o">==</span> <span class="n">d</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the Scipy LP solver...
+Solution status: 0
+Running time: 6.9962s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The objective value in terms of the worst-case expected total cost can be retrieved as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective: -267.73545
+</pre></div>
+</div>
+</div>
+</div>
+<p>The distributionally robust model is a linear programming problem with dimension information provided below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">do_math</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=============================================
+Number of variables:           60916
+Continuous/binaries/integers:  60916/0/0
+---------------------------------------------
+Number of linear constraints:  44865
+Inequalities/equalities:       22457/22408
+Number of coefficients:        214671
+---------------------------------------------
+Number of SOC constraints:     0
+---------------------------------------------
+Number of ExpCone constraints: 0
+---------------------------------------------
+Number of PSCone constraints:  0
+=============================================
+</pre></div>
+</div>
+</div>
+</div>
+<p>It can be seen that the linear programming problem has a large dimension, because the number of pieces involved in the piecewise affine objective function grows exponentially as the product number increases. We will then demonstrate the approaches mentioned in <span class="bibtex-citation" id="id2">[<a class="reference internal" href="#id5" title="Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. Management Science, 66(8):3329–3339, 2020.">CSX20</a>]</span> that applies event-wise affine  adaptation to approximate the piecewise affine function. Here, a wait-and-see decision <span class="math notranslate nohighlight">\(y_i\)</span> is introduced to represent the piecewise expression <span class="math notranslate nohighlight">\(\max\{x_i - z_i, 0\}\)</span>, and the recourse decision is further approximated by the adaptation scheme <span class="math notranslate nohighlight">\(\overline{\mathcal{A}}(\{\{1\}, \{2\}, ..., \{S\}\}, [I+1])\)</span>, which implies that the decision adapts to each scenario <span class="math notranslate nohighlight">\(s\)</span> and also affinely dependents on random variables <span class="math notranslate nohighlight">\(\pmb{z}\in\mathbb{R}^I\)</span> and <span class="math notranslate nohighlight">\(u\in\mathbb{R}\)</span>. Such an adaptive distributionally robust model is implemented by the following code.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">S</span><span class="p">)</span>
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">()</span>
+
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="mi">0</span> <span class="o">&lt;=</span> <span class="n">z</span><span class="p">,</span> <span class="n">z</span> <span class="o">&lt;=</span> <span class="n">zbar</span><span class="p">,</span>
+                    <span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">zhat</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">u</span><span class="p">)</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">exptset</span><span class="p">(</span><span class="n">E</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">theta</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">S</span><span class="p">)</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">I</span><span class="p">)</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">z</span><span class="p">)</span>
+<span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">S</span><span class="p">):</span>
+    <span class="n">y</span><span class="o">.</span><span class="n">adapt</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="o">-</span><span class="n">p</span><span class="nd">@x</span> <span class="o">+</span> <span class="n">E</span><span class="p">(</span><span class="n">p</span><span class="nd">@y</span><span class="p">),</span> <span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">y</span> <span class="o">&gt;=</span> <span class="n">x</span> <span class="o">-</span> <span class="n">z</span><span class="p">,</span> <span class="n">y</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">c</span><span class="nd">@x</span> <span class="o">==</span> <span class="n">d</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the Scipy LP solver...
+Solution status: 0
+Running time: 0.2759s
+</pre></div>
+</div>
+</div>
+</div>
+<p>It can be seen that by utilizing recourse decision <span class="math notranslate nohighlight">\(\pmb{y}\)</span> following the event-wise affine adaptation, the same objective value is achieved as below, with much shorter solution time. This is because the dimension of the problem is much smaller compared with the previous model.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Objective: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.5f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Objective: -267.73545
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">model</span><span class="o">.</span><span class="n">do_math</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>=============================================
+Number of variables:           14866
+Continuous/binaries/integers:  14866/0/0
+---------------------------------------------
+Number of linear constraints:  9165
+Inequalities/equalities:       4607/4558
+Number of coefficients:        44271
+---------------------------------------------
+Number of SOC constraints:     0
+---------------------------------------------
+Number of ExpCone constraints: 0
+---------------------------------------------
+Number of PSCone constraints:  0
+=============================================
+</pre></div>
+</div>
+</div>
+</div>
+<br>
+<br>
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id3">
+<div role="list" class="citation-list">
+<div class="citation" id="id5" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>CSX20<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id2">2</a>)</span>
+<p>Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. <em>Management Science</em>, 66(8):3329–3339, 2020.</p>
+</div>
+</div>
+</div>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_dro_medical_app.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Medical Appointment Scheduling under Cross Moment Ambiguity</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_dro_lot_sizing.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Adaptive Distributionally Robust Lot-Sizing</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Melvyn Sim, Zhi Chen, Peng Xiong.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

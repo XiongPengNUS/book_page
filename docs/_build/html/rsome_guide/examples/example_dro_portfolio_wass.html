@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+
+
+<html lang="Python" data-content_root="../../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Mean-Risk Portfolio with a Wasserstein Ambiguity Set &#8212; RSOME  documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=75c7c72ae941e8b558d8" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=8f2a1f02" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.11b39860a7a0cbfd473a3ad8a317855267ff0bd372690045ca344a6b62be495e.css?v=8cd3d715" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-design.min.css?v=6a604523" />
+    <link rel="stylesheet" type="text/css" href="../../_static/custom.css?v=9075c249" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../../_static/scripts/fontawesome.js?digest=75c7c72ae941e8b558d8"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8" />
+<link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8" />
+
+    <script src="../../_static/documentation_options.js?v=1e580bb1"></script>
+    <script src="../../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script data-sd-tabs-storage-prefix="sphinx-design-tab-id-" src="../../_static/design-tabs.js?v=fcb327ea"></script>
+    <script>window.MathJax = {"tex": {"tags": "ams"}, "options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'rsome_guide/examples/example_dro_portfolio_wass';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <script src="../../_static/custom.js?v=964f46ef"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Robust Satisficing for Portfolio Optimization" href="example_rs_portfolio.html" />
+    <link rel="prev" title="Robust Portfolio under Moment Uncertainty" href="example_dro_portfolio_uncertain_moment.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="color-scheme" content="light dark"/>
+  <meta name="docsearch:language" content="Python"/>
+  <meta name="docsearch:version" content="" />
+  
+    
+    <script src="../../_static/searchtools.js"></script>
+    <script src="../../_static/language_data.js"></script>
+    <script src="../../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button type="button" class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation" aria-expanded="false" aria-controls="pst-primary-sidebar-modal">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../../_static/logolight.png" class="logo__image only-light" alt=""/>
+    <img src="../../_static/logodark.png" class="logo__image only-dark pst-js-only" alt=""/>
+  
+  
+    <p class="title logo__title"> </p>
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button type="button" class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal" tabindex="-1"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar hide-on-wide">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../index.html">
+    Home
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_install.html">
+    Install
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="../../rsome_documentation.html">
+    Documentation
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_examples.html">
+    Applications
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../../rsome_about.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button type="button" class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<div class="theme-switch-container dropdown pst-js-only" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Color mode">
+  <button type="button" class="btn btn-sm nav-link pst-navbar-icon theme-switch-button dropdown-toggle" aria-label="Color mode" data-bs-toggle="dropdown">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light" title="Light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark" title="Dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto" title="System Settings"></i>
+  </button>
+  <ul class="dropdown-menu dropdown-menu-end">
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="auto"><i class="fa-solid fa-circle-half-stroke fa-lg me-1"></i>System Settings</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="light"><i class="fa-solid fa-sun fa-lg me-1"></i>Light</button></li>
+    <li><button type="button" class="dropdown-item d-flex align-items-center theme-change-button" data-mode="dark"><i class="fa-solid fa-moon fa-lg me-1"></i>Dark</button></li>
+  </ul>
+</div></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/XiongPengNUS/rsome" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-square-github fa-lg" aria-hidden="true"></i><span class="visually-hidden">GitHub</span></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none"></div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="dro-portfolio-wass-title">
+<span id="mean-risk-portfolio-with-a-wasserstein-ambiguity-set"></span><h1>Mean-Risk Portfolio with a Wasserstein Ambiguity Set<a class="headerlink" href="#dro-portfolio-wass-title" title="Link to this heading">#</a></h1>
+<section id="problem-statement-and-parameters">
+<h2>Problem Statement and Parameters<a class="headerlink" href="#problem-statement-and-parameters" title="Link to this heading">#</a></h2>
+<p>In this example, we delve into the mean-risk portfolio optimization problem discussed in <span class="bibtex-citation" id="id1">[<a class="reference internal" href="#id25" title="Peyman Mohajerin Esfahani and Daniel Kuhn. Data-driven distributionally robust optimization using the wasserstein metric: performance guarantees and tractable reformulations. Mathematical Programming, 171(1-2):115–166, 2018.">MEK18</a>]</span>. Here, the yearly returns of <span class="math notranslate nohighlight">\(m\)</span> assets in a capital market are encapsulated by a random vector <span class="math notranslate nohighlight">\(\tilde{\pmb{z}}\in\mathbb{R}^m\)</span>. The investor is tasked with making decisions <span class="math notranslate nohighlight">\(\pmb{x}\in\mathbb{R}^m\)</span>, where each <span class="math notranslate nohighlight">\(x_i\)</span> denotes the percentage of available capital invested in the <span class="math notranslate nohighlight">\(i\)</span>th asset. The formulation of the portfolio optimization problem is solved as the following distributionally robust model,</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\min~&amp;\sup\limits_{\mathbb{P}\in\mathcal{F}(\epsilon)}\mathbb{E}_{\mathbb{P}}
+\left[
+-\tilde{\pmb{z}}^{\top}\pmb{x} + \rho\left(\tau + \frac{1}{\alpha}\max\left\{-\tilde{\pmb{z}}^{\top}\pmb{x} - \tau, 0\right\}\right)
+\right] \\
+\text{s.t. }&amp;\sum\limits_{i=1}^mx_i = 1 \\
+&amp;\pmb{x}\in\mathbb{R}_+^m,
+\end{align}\end{split}\]</div>
+<p>where the ambiguity set <span class="math notranslate nohighlight">\(\mathcal{F}(\epsilon) = \left\{\mathbb{P}\in\mathcal{P}_0(\mathbb{R}^m)\left|d_W\left(\hat{\mathbb{P}}_n, \mathbb{P}\right) \leq \epsilon\right.\right\}\)</span> is the Wasserstein ball of radius <span class="math notranslate nohighlight">\(\epsilon\)</span> centered at the empirical distribution <span class="math notranslate nohighlight">\(\hat{\mathbb{P}}_n\)</span>, represented by a sample dataset with <span class="math notranslate nohighlight">\(n\)</span> records. The objective of the robust model is to minimize the weighted summation of the mean and the conditional value at risk (CVaR) of the portfolio loss <span class="math notranslate nohighlight">\(-\tilde{\pmb{z}}^{\top}\pmb{x}\)</span> under the worst-case distribution over the ambiguity set  <span class="math notranslate nohighlight">\(\mathcal{F}(\epsilon)\)</span>, with the confidence level parameter <span class="math notranslate nohighlight">\(\alpha\in (0, 1]\)</span> and risk-aversion parameter <span class="math notranslate nohighlight">\(\rho \in \mathbb{R}_+\)</span>. We follow the piecewise linear expression proposed by <span class="bibtex-citation" id="id2">[<a class="reference internal" href="#id26" title="R Tyrrell Rockafellar and Stanislav Uryasev. Optimization of conditional value-at-risk. Journal of risk, 2:21–42, 2000.">RU00</a>]</span> to reformulate the objective function as its equivalence</p>
+<div class="math notranslate nohighlight">
+\[\min~\sup\limits_{\mathbb{P}\in\mathcal{F}(\epsilon)}\mathbb{E}_{\mathbb{P}}
+\left[
+\max\limits_{k\in[K]}\left\{
+a_k\tilde{\pmb{z}}^{\top}\pmb{x} + b_k\tau
+\right\}
+\right],\]</div>
+<p>where <span class="math notranslate nohighlight">\(K=2\)</span>, and coefficients <span class="math notranslate nohighlight">\(a_k\)</span> and <span class="math notranslate nohighlight">\(b_k\)</span> of the piecewise linear function are given below.</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{cases}
+a_1 = -1, &amp; b_1 = \rho \\
+a_2 = -1 - \rho/\alpha, &amp; b_2 = \rho-\rho/\alpha
+\end{cases}\end{split}\]</div>
+<p>In the subsequent numerical studies, model parameters are configured according to <span class="bibtex-citation" id="id3">[<a class="reference internal" href="#id25" title="Peyman Mohajerin Esfahani and Daniel Kuhn. Data-driven distributionally robust optimization using the wasserstein metric: performance guarantees and tractable reformulations. Mathematical Programming, 171(1-2):115–166, 2018.">MEK18</a>]</span> as follows,</p>
+<ul class="simple">
+<li><p>Number of assets is <span class="math notranslate nohighlight">\(m=10\)</span>;</p></li>
+<li><p>The confidence level is <span class="math notranslate nohighlight">\(1 - \alpha = 80\%\)</span>;</p></li>
+<li><p>The risk-aversion coefficient <span class="math notranslate nohighlight">\(\rho=10\)</span>.</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-2</span>                            <span class="c1"># radius of the Wasserstein ball</span>
+<span class="n">rho</span> <span class="o">=</span> <span class="mi">10</span>                                  <span class="c1"># risk-aversion coefficient</span>
+<span class="n">alpha</span> <span class="o">=</span> <span class="mf">0.2</span>                               <span class="c1"># confidence level</span>
+
+<span class="n">a1</span><span class="p">,</span> <span class="n">b1</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">rho</span>                          <span class="c1"># coefficients of the piecewise expression</span>
+<span class="n">a2</span><span class="p">,</span> <span class="n">b2</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span> <span class="o">-</span> <span class="n">rho</span><span class="o">/</span><span class="n">alpha</span><span class="p">,</span> <span class="n">rho</span> <span class="o">-</span> <span class="n">rho</span><span class="o">/</span><span class="n">alpha</span>  <span class="c1"># coefficients of the piecewise expression</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>It is assumed that the random return <span class="math notranslate nohighlight">\(\tilde{z}_i\)</span> of each asset is decomposable into a systematic risk factor <span class="math notranslate nohighlight">\(\psi \sim N(0, 2\%)\)</span> common to all assets and an idiosyncratic risk factor <span class="math notranslate nohighlight">\(\zeta_i\in N(i\times 3\%, i\times 2.5\%)\)</span> specific to asset <span class="math notranslate nohighlight">\(i\)</span>. The empirical distribution of the random returns <span class="math notranslate nohighlight">\(\tilde{\pmb{z}}\)</span> is then represented by a randomly generated sample dataset using the <code class="docutils literal notranslate"><span class="pre">norm_return()</span></code> function defined below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">norm_return</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">):</span>
+
+    <span class="n">i</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="o">+</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">psi</span> <span class="o">=</span> <span class="mf">0.02</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span>
+    <span class="n">zeta</span> <span class="o">=</span> <span class="mf">0.03</span><span class="o">*</span><span class="n">i</span> <span class="o">+</span> <span class="mf">0.025</span><span class="o">*</span><span class="n">i</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+    <span class="n">zhat</span> <span class="o">=</span> <span class="n">psi</span> <span class="o">+</span> <span class="n">zeta</span>
+
+    <span class="k">return</span> <span class="n">zhat</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>In the following code segment, we generate a empirical dataset of <span class="math notranslate nohighlight">\(n=300\)</span> records for <span class="math notranslate nohighlight">\(m=10\)</span> assets. The Wasserstein ball radius <span class="math notranslate nohighlight">\(\epsilon\)</span> is specified to be <span class="math notranslate nohighlight">\(0.01\)</span>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">zhat</span> <span class="o">=</span> <span class="n">norm_return</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+<span class="n">epsilon</span> <span class="o">=</span> <span class="mf">1e-2</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="equivalent-deterministic-problem">
+<h2>Equivalent Deterministic Problem<a class="headerlink" href="#equivalent-deterministic-problem" title="Link to this heading">#</a></h2>
+<p>According to <strong>Corollary 5.1</strong> of <span class="bibtex-citation" id="id4">[<a class="reference internal" href="#id25" title="Peyman Mohajerin Esfahani and Daniel Kuhn. Data-driven distributionally robust optimization using the wasserstein metric: performance guarantees and tractable reformulations. Mathematical Programming, 171(1-2):115–166, 2018.">MEK18</a>]</span>, the distributionally robust model above with a one-norm Wasserstein ambiguity set under the unconstrained support <span class="math notranslate nohighlight">\(\Xi=\mathbb{R}^m\)</span> is equivalent to the deterministic linear program</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\begin{aligned}
+\min~&amp;\lambda \epsilon + \frac{1}{n}\sum\limits_{i=1}^nc_i \\
+\text{s.t. }&amp;\sum\limits_{i=1}^mx_i = 1 \\
+&amp;b_k\tau + a_k\hat{\pmb{z}}_j^{\top}\pmb{x} \leq c_j &amp;&amp;\forall j\in[n],~\forall k\in[K] \\
+&amp;\|-a_k\pmb{x}\|_{\infty} \leq \lambda \\
+&amp;\pmb{x}\in\mathbb{R}_+^m, ~\tau \in\mathbb{R}, ~\lambda \in \mathbb{R}, ~\pmb{c}\in \mathbb{R}^n,
+\end{aligned}\end{split}\]</div>
+<p>and the deterministic problem is solved by the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">ro</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">lamb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+<span class="n">c</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lamb</span><span class="o">*</span><span class="n">epsilon</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">c</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">b1</span><span class="o">*</span><span class="n">tau</span> <span class="o">+</span> <span class="n">a1</span><span class="o">*</span><span class="p">(</span><span class="n">zhat</span><span class="nd">@x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">b2</span><span class="o">*</span><span class="n">tau</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="p">(</span><span class="n">zhat</span><span class="nd">@x</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">c</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="o">-</span> <span class="n">a1</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lamb</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="o">-</span> <span class="n">a2</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lamb</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the Scipy LP solver...
+Solution status: 0
+Running time: 0.0291s
+</pre></div>
+</div>
+</div>
+</div>
+<p>The objective value of the model is shown as follows.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Minimum objective: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Minimum objective: -1.2428
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="implementation-via-the-rsome-dro-model">
+<h2>Implementation via the RSOME <code class="docutils literal notranslate"><span class="pre">dro</span></code> Model<a class="headerlink" href="#implementation-via-the-rsome-dro-model" title="Link to this heading">#</a></h2>
+<p>According to <span class="bibtex-citation" id="id5">[<a class="reference internal" href="#id9" title="Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. Management Science, 66(8):3329–3339, 2020.">CSX20</a>]</span>, the Wasserstein ambiguity set <span class="math notranslate nohighlight">\(\mathcal{F}(\epsilon)\)</span> can be rewritten as</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\mathcal{F}(\epsilon) = \left\{
+\mathbb{P}\in\mathcal{P}_0\left(\mathbb{R}^m\times\mathbb{R}\times[n]\right) \left|
+\begin{array}{ll}
+(\tilde{\pmb{z}}, \tilde{u}, \tilde{s}) \sim \mathbb{P} \\
+\mathbb{E}_{\mathbb{P}}[\tilde{u}] \leq \epsilon \\
+\mathbb{P}\left[\left.\left\|\tilde{\pmb{z}} - \hat{\pmb{z}}_s\right\|_1\leq \tilde{u}\right|\tilde{s}=s\right] = 1 &amp;\forall s \in [n] \\
+\mathbb{P}\left[\tilde{s}=s\right] = \frac{1}{n}
+\end{array}
+\right.
+\right\},\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{\pmb{z}}_s\)</span> is the <span class="math notranslate nohighlight">\(s\)</span>th record of the empirical distribution. The distributionally robust optimization problem solved in the previous section can be solved as an RSOME <code class="docutils literal notranslate"><span class="pre">dro</span></code> model, as demonstrated by the code below.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span><span class="p">,</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">dro</span><span class="o">.</span><span class="n">Model</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+<span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+
+<span class="n">z</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+<span class="n">u</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">rvar</span><span class="p">()</span>
+<span class="n">fset</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">ambiguity</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">s</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="n">fset</span><span class="p">[</span><span class="n">s</span><span class="p">]</span><span class="o">.</span><span class="n">suppset</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">z</span> <span class="o">-</span> <span class="n">zhat</span><span class="p">[</span><span class="n">s</span><span class="p">],</span> <span class="mi">1</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">u</span><span class="p">)</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">exptset</span><span class="p">(</span><span class="n">E</span><span class="p">(</span><span class="n">u</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">epsilon</span><span class="p">)</span>
+<span class="n">pr</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">p</span>
+<span class="n">fset</span><span class="o">.</span><span class="n">probset</span><span class="p">(</span><span class="n">pr</span> <span class="o">==</span> <span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span>
+
+<span class="n">r</span> <span class="o">=</span> <span class="n">z</span> <span class="o">@</span> <span class="n">x</span>
+<span class="n">model</span><span class="o">.</span><span class="n">minsup</span><span class="p">(</span><span class="n">E</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">maxof</span><span class="p">(</span><span class="n">a1</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="n">b1</span><span class="o">*</span><span class="n">tau</span><span class="p">,</span>
+                         <span class="n">a2</span><span class="o">*</span><span class="n">r</span> <span class="o">+</span> <span class="n">b2</span><span class="o">*</span><span class="n">tau</span><span class="p">)),</span> <span class="n">forall</span><span class="o">=</span><span class="n">fset</span><span class="p">)</span>
+<span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+
+<span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Being solved by the Scipy LP solver...
+Solution status: 0
+Running time: 0.5920s
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Minimum objective: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">get</span><span class="p">()</span><span class="si">:</span><span class="s1">.4f</span><span class="si">}</span><span class="s1">&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Minimum objective: -1.2428
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="impact-of-the-wasserstein-radius">
+<h2>Impact of the Wasserstein Radius<a class="headerlink" href="#impact-of-the-wasserstein-radius" title="Link to this heading">#</a></h2>
+<p>In this section, we will visualize the optimal investment decisions under different values of Wasserstein radius <span class="math notranslate nohighlight">\(\epsilon\)</span>. The distributionally robust portfolio model is defined as the following function <code class="docutils literal notranslate"><span class="pre">portfolio_wass()</span></code>, where the input arguments are the empirical distribution <code class="docutils literal notranslate"><span class="pre">zhat</span></code> and the selected radius value <code class="docutils literal notranslate"><span class="pre">epsilon</span></code>.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">dro</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">cpt_solver</span> <span class="k">as</span> <span class="n">cpt</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="kn">import</span> <span class="n">E</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">rsome</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">rso</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">portfolio_wass</span><span class="p">(</span><span class="n">zhat</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">):</span>
+
+    <span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="n">zhat</span><span class="o">.</span><span class="n">shape</span>
+
+    <span class="n">model</span> <span class="o">=</span> <span class="n">ro</span><span class="o">.</span><span class="n">Model</span><span class="p">()</span>
+
+    <span class="n">x</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">m</span><span class="p">)</span>
+    <span class="n">lamb</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+    <span class="n">tau</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">()</span>
+    <span class="n">s</span> <span class="o">=</span> <span class="n">model</span><span class="o">.</span><span class="n">dvar</span><span class="p">(</span><span class="n">n</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">lamb</span><span class="o">*</span><span class="n">epsilon</span> <span class="o">+</span> <span class="p">(</span><span class="mi">1</span><span class="o">/</span><span class="n">n</span><span class="p">)</span><span class="o">*</span><span class="n">s</span><span class="o">.</span><span class="n">sum</span><span class="p">())</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span> <span class="o">==</span> <span class="mi">1</span><span class="p">,</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">b1</span><span class="o">*</span><span class="n">tau</span> <span class="o">+</span> <span class="n">a1</span><span class="o">*</span><span class="p">(</span><span class="n">zhat</span><span class="nd">@x</span><span class="p">)</span>  <span class="o">&lt;=</span> <span class="n">s</span><span class="p">)</span>
+    <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">b2</span><span class="o">*</span><span class="n">tau</span> <span class="o">+</span> <span class="n">a2</span><span class="o">*</span><span class="p">(</span><span class="n">zhat</span><span class="nd">@x</span><span class="p">)</span>  <span class="o">&lt;=</span> <span class="n">s</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="o">-</span> <span class="n">a1</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lamb</span><span class="p">)</span>
+        <span class="n">model</span><span class="o">.</span><span class="n">st</span><span class="p">(</span><span class="n">rso</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="o">-</span> <span class="n">a2</span><span class="o">*</span><span class="n">x</span><span class="p">,</span> <span class="s1">&#39;inf&#39;</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="n">lamb</span><span class="p">)</span>
+
+    <span class="n">model</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">cpt</span><span class="p">,</span> <span class="n">display</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">x</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Then the function is invoked under different Wasserstein radius values in the following code segment, and the experiments are repeated for <code class="docutils literal notranslate"><span class="pre">repeats=50</span></code> times.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">multiprocess</span><span class="w"> </span><span class="kn">import</span> <span class="n">Pool</span>
+
+<span class="n">n</span><span class="p">,</span> <span class="n">m</span> <span class="o">=</span> <span class="mi">300</span><span class="p">,</span> <span class="mi">10</span>
+<span class="n">n_jobs</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="n">repeats</span> <span class="o">=</span> <span class="mi">50</span>
+<span class="n">epsilon_values</span> <span class="o">=</span> <span class="mi">10</span> <span class="o">**</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="o">-</span><span class="mi">3</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">12</span><span class="p">)</span>
+<span class="n">sols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="n">repeats</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">epsilon_values</span><span class="p">),</span> <span class="n">m</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">rep</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">repeats</span><span class="p">):</span>
+    <span class="n">zhat</span> <span class="o">=</span> <span class="n">norm_return</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
+    <span class="k">with</span> <span class="n">Pool</span><span class="p">(</span><span class="n">n_jobs</span><span class="p">)</span> <span class="k">as</span> <span class="n">pr</span><span class="p">:</span>
+        <span class="n">params</span> <span class="o">=</span> <span class="p">[[</span><span class="n">zhat</span><span class="p">,</span> <span class="n">epsilon</span><span class="p">]</span> <span class="k">for</span> <span class="n">epsilon</span> <span class="ow">in</span> <span class="n">epsilon_values</span><span class="p">]</span>
+        <span class="n">results</span> <span class="o">=</span> <span class="n">pr</span><span class="o">.</span><span class="n">starmap</span><span class="p">(</span><span class="n">portfolio_wass</span><span class="p">,</span> <span class="n">params</span><span class="p">)</span>
+    <span class="n">sols</span><span class="p">[</span><span class="n">rep</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">results</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, the average portfolio weights are illustrated by the following figure. Please refer to <strong>Fig. 4</strong> of <span class="bibtex-citation" id="id6">[<a class="reference internal" href="#id25" title="Peyman Mohajerin Esfahani and Daniel Kuhn. Data-driven distributionally robust optimization using the wasserstein metric: performance guarantees and tractable reformulations. Mathematical Programming, 171(1-2):115–166, 2018.">MEK18</a>]</span> for the same results.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">mpl</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mf">7.5</span><span class="p">,</span> <span class="mi">5</span><span class="p">))</span>
+
+<span class="n">sols_mean</span> <span class="o">=</span> <span class="n">sols</span><span class="o">.</span><span class="n">mean</span><span class="p">(</span><span class="n">axis</span><span class="o">=</span><span class="mi">0</span><span class="p">)</span>
+<span class="n">bottom</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">colors</span> <span class="o">=</span> <span class="n">mpl</span><span class="o">.</span><span class="n">colormaps</span><span class="p">[</span><span class="s1">&#39;jet&#39;</span><span class="p">](</span><span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="n">m</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">m</span><span class="p">):</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">fill_between</span><span class="p">(</span><span class="n">epsilon_values</span><span class="p">,</span> <span class="n">bottom</span><span class="p">,</span> <span class="n">bottom</span><span class="o">+</span><span class="n">sols_mean</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span>
+                     <span class="n">alpha</span><span class="o">=</span><span class="mf">0.9</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="n">colors</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+    <span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">epsilon_values</span><span class="p">,</span> <span class="n">bottom</span><span class="o">+</span><span class="n">sols_mean</span><span class="p">[:,</span> <span class="n">i</span><span class="p">],</span>
+             <span class="n">linewidth</span><span class="o">=</span><span class="s1">&#39;1.5&#39;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s1">&#39;k&#39;</span><span class="p">)</span>
+    <span class="n">bottom</span> <span class="o">+=</span> <span class="n">sols_mean</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">xscale</span><span class="p">(</span><span class="s1">&#39;log&#39;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;$\epsilon$&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;Average Portfolio Weights&#39;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="mi">14</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">grid</span><span class="p">()</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/96e72a5ea3ac18a7cd5c91a4547e4c1164e67bff0ca1bb07baa428b814d4d4ea.png" src="../../_images/96e72a5ea3ac18a7cd5c91a4547e4c1164e67bff0ca1bb07baa428b814d4d4ea.png" />
+</div>
+</div>
+<br>
+<br>
+<p><font size="5">Reference</font></p>
+<div class="docutils container" id="id7">
+<div role="list" class="citation-list">
+<div class="citation" id="id9" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id5">CSX20</a><span class="fn-bracket">]</span></span>
+<p>Zhi Chen, Melvyn Sim, and Peng Xiong. Robust stochastic optimization made easy with RSOME. <em>Management Science</em>, 66(8):3329–3339, 2020.</p>
+</div>
+<div class="citation" id="id25" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span>MEK18<span class="fn-bracket">]</span></span>
+<span class="backrefs">(<a role="doc-backlink" href="#id1">1</a>,<a role="doc-backlink" href="#id3">2</a>,<a role="doc-backlink" href="#id4">3</a>,<a role="doc-backlink" href="#id6">4</a>)</span>
+<p>Peyman Mohajerin Esfahani and Daniel Kuhn. Data-driven distributionally robust optimization using the wasserstein metric: performance guarantees and tractable reformulations. <em>Mathematical Programming</em>, 171(1-2):115–166, 2018.</p>
+</div>
+<div class="citation" id="id26" role="doc-biblioentry">
+<span class="label"><span class="fn-bracket">[</span><a role="doc-backlink" href="#id2">RU00</a><span class="fn-bracket">]</span></span>
+<p>R Tyrrell Rockafellar and Stanislav Uryasev. Optimization of conditional value-at-risk. <em>Journal of risk</em>, 2:21–42, 2000.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="example_dro_portfolio_uncertain_moment.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Robust Portfolio under Moment Uncertainty</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="example_rs_portfolio.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Robust Satisficing for Portfolio Optimization</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../../_static/scripts/bootstrap.js?digest=75c7c72ae941e8b558d8"></script>
+<script defer src="../../_static/scripts/pydata-sphinx-theme.js?digest=75c7c72ae941e8b558d8"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Melvyn Sim, Zhi Chen, Peng Xiong.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 9.2.0.
+  </p>
+</div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

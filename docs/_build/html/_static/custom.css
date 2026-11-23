@@ -1,0 +1,57 @@
+/* Increase font size of header navigation links */
+.bd-header .navbar-nav .nav-link {
+    color: #003D7C !important;
+    font-size: 1.6rem !important;
+    font-weight: 400;
+}
+
+/* Increase spacing between header navigation links */
+.bd-header .navbar-nav {
+    gap: 0.5rem;
+}
+
+/* Main title: # */
+.bd-content h1 {
+    font-size: 2.25rem !important;
+    font-weight: 400;
+}
+
+/* Section heading: ## */
+.bd-content h2 {
+    font-size: 1.75rem !important;
+    font-weight: 400;
+}
+
+/* Subsection heading: ### */
+.bd-content h3 {
+    font-size: 1.5rem !important;
+    font-weight: 400;
+}
+
+/* Sub-subsection heading: #### */
+.bd-content h4 {
+    font-size: 1.25rem !important;
+    font-weight: 400;
+}
+
+table.dataframe th, table.dataframe td {
+    padding: 0.1rem 0.5rem !important;
+}
+
+/* Left-align the entire pandas DataFrame table */
+.bd-content .cell_output table.dataframe,
+.bd-content .output_area table.dataframe,
+.bd-content table.dataframe {
+    display: table !important;
+    width: auto !important;
+    max-width: 100%;
+    margin-left: 0 !important;
+    margin-right: auto !important;
+    float: none !important;
+}
+
+/* Left-align notebook output containers */
+.bd-content .cell_output,
+.bd-content .output_area {
+    text-align: left !important;
+}
