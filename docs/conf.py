@@ -53,7 +53,8 @@ html_theme_options = {
 
 templates_path = ['_templates']
 html_static_path = ['_static']
-html_js_files = ["custom.js"]
+#html_js_files = ["custom.js"]
+html_js_files = []
 html_css_files = ["custom.css"]
 
 nb_execution_mode = "auto"
